@@ -1,0 +1,1 @@
+MonoHZZ4l_ZpBaryonic_13TeV-madgraph_Target_MZp-250_MChi-650_Ref_10_500_reweighted 100000 1 82266 1.42422e-10
