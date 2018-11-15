@@ -1,5 +1,5 @@
 #define HZZ4LeptonsAnalysis_cxx
-#include "HZZ4LeptonsAnalysis_2e2mu.h"
+#include "HZZ4LeptonsAnalysis_4e.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -54,8 +54,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    cout << "bnnOUT= " << bnnOUT << endl;
    bnn_file.open(bnnOUT);
 
-   bnn_file << "weight int_weight lept1_pt lept1_eta lept1_phi lept1_charge lept1_pfx lept1_sip lept1_mvaid lept2_pt lept2_eta lept2_phi lept2_charge lept2_pfx lept2_sip lept2_mvaid lept3_pt lept3_eta lept3_phi lept3_charge lept3_pfx lept3_sip lept4_pt lept4_eta lept4_phi lept4_charge lept4_pfx lept4_sip iso_max sip_max Z1mass Z2mass angle_costhetastar angle_costheta1 angle_costheta2 angle_phi angle_phistar1 KD psKD gravKD pt4l mass4l pfmet jet1_pt jet1_eta jet1_phi jet1_et jet2_pt jet2_eta jet2_phi jet2_et deltaetajj massjj VD njets" << endl;
-     
+   bnn_file << "weight int_weight lept1_pt lept1_eta lept1_phi lept1_charge lept1_pfx lept1_sip lept1_mvaid lept2_pt lept2_eta lept2_phi lept2_charge lept2_pfx lept2_sip lept2_mvaid lept3_pt lept3_eta lept3_phi lept3_charge lept3_pfx lept3_sip lept3_mvaid lept4_pt lept4_eta lept4_phi lept4_charge lept4_pfx lept4_sip lept4_mvaid iso_max sip_max Z1mass Z2mass angle_costhetastar angle_costheta1 angle_costheta2 angle_phi angle_phistar1 KD psKD gravKD pt4l mass4l pfmet jet1_pt jet1_eta jet1_phi jet1_et jet2_pt jet2_eta jet2_phi jet2_et deltaetajj massjj VD njets pfmet" << endl;
+
    // Book txt file for candidate events
    Char_t txtOUT[500];
    sprintf(txtOUT,"%s_txt.txt",datasetName.Data());
@@ -68,6 +68,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    cout << "Opening a txt file with candidate events " << txtOUT_VBF << endl;
    ofstream output_txt_vbf;
    output_txt_vbf.open(txtOUT_VBF);
+
 
    // isSignal DM
    //TString signal="2HDM";
@@ -102,6 +103,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    isggH=(datasetName.Contains(ggH) || datasetName.Contains(ggHnew));
    cout << "isggH " << isggH << endl;
    
+
    TString powheg15="powheg15";
    Bool_t ispowheg15=false;
    ispowheg15=datasetName.Contains(powheg15);
@@ -143,11 +145,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      pTweighthisto=(TH1F*)fBaryonic->Get(histotitle);
    }
 
-   // Pileup reweighting 2016 data vs Spring16 MC in 80x                                                                                                      
+   // Pileup reweighting 2016 data vs Spring16 MC in 80x                                                                                                                                                  
 
    TFile *_filePU;
    //_filePU= TFile::Open("pileup_MC_80x_271036-276811_69200.root");
-   //TH1D *puweight = (TH1D*)_filePU->Get("puweight");   
+   //TH1D *puweight = (TH1D*)_filePU->Get("puweight");
    _filePU= TFile::Open("puWeightsMoriond17_v2.root");     
    TH1F *puweight = (TH1F*)_filePU->Get("weights"); 
 
@@ -168,9 +170,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    // TFile *ele_scale_Sipfactors2016_Crack = new TFile("SIP_Cracks.root");
    // TH2F *ele_scale_Sip2016_Cracks = (TH2F*)gDirectory->Get("hScaleFactors_SIP_Cracks"); 
    
-   TFile *mu_scale_factors = new TFile("final_HZZSF_pt0_200.root");
-   TH2F *mu_scale_2016 = (TH2F*)gDirectory->Get("FINAL"); 
-
    // correction to the error
    /*
    TFile *ebe_corr2012= new TFile("ebeOverallCorrections.Legacy2013.v0.root");
@@ -194,7 +193,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      "PDFReplicaDn",
      "PDFReplicaUp"
    };
-
+   
    TFile* fin = TFile::Open("Kfactor_Collected_ggHZZ_2l2l_NNLO_NNPDF_NarrowWidth_13TeV.root");
    // Open the files
    TSpline3* ggZZ_kf[9]={NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
@@ -202,6 +201,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      ggZZ_kf[f] = (TSpline3*)fin->Get(Form("sp_kfactor_%s", strSystTitle[f].Data()));
    }   
    fin->Close();
+   
 
    // Book root file (for output):
    TFile * theFile = new TFile(output,"RECREATE");
@@ -238,7 +238,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    int N_6 = 0;
    int N_7 = 0;
    int N_7_PFMET = 0;
-    
    int N_8 = 0;
    int N_8_a = 0;
    int N_8_b = 0;
@@ -254,7 +253,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    int N_9b_VBF = 0;
    int N_9_PFMET = 0;
    int N_VBF = 0;
-   
+
    int N_10 = 0;
    int N_11 = 0;
 
@@ -280,7 +279,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    double N_7_w = 0;
    double N_7_PFMET_w = 0;
 
-
    double N_8_w = 0;
    double N_8_a_w = 0;
    double N_8_b_w = 0;
@@ -295,7 +293,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    double N_9a_VBF_w = 0;
    double N_9b_VBF_w = 0;
    double N_9_PFMET_w = 0;
-     
+
    double N_VBF_w = 0;
 
    double N_10_w = 0;
@@ -318,7 +316,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    // Pileup reweighting
    TH1F *hPUvertices             = new TH1F("hPUvertices", "hPUvertices",70,0.,70.);  
    TH1F *hPUvertices_ReWeighted  = new TH1F("hPUvertices_ReWeighted", "hPUvertices_ReWeighted",70,0.,70.);  
-   
+
    // pfmet with logaritmic bin width
    const int NMBINS = 10;
    const double MMIN = 1.0, MMAX = 10000.0;
@@ -336,15 +334,19 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    //step 3
    TH1F * hMZ_3 = new TH1F("hMZ_3", "Mass of Z after selection step 3", 200 , -0.5 , 199.5 );
    hMZ_3->SetXTitle("mass_Z  (GeV)");
+   TH1F * hMZBB_3 = new TH1F("hMZBB_3", "Mass of Z after selection step 3 barrel barrel", 200 , -0.5 , 199.5 );
+   hMZBB_3->SetXTitle("mass_Z barrel barrel  (GeV)");
+   TH1F * hMZEE_3 = new TH1F("hMZEE_3", "Mass of Z after selection step 3 endcap endcap", 200 , -0.5 , 199.5 );
+   hMZEE_3->SetXTitle("mass_Z endcap endcap  (GeV)");
    TH1F * hPtZ_3 = new TH1F("hPtZ_3", "Pt of Z after selection step 3", 200 , -0.5 , 199.5 );
    hPtZ_3->SetXTitle("pt_Z  (GeV)");
    TH1F * hYZ_3 = new TH1F("hYZ_3", "Y of Z after selection step 3", 500 , -5. , 5.);
    hYZ_3->SetXTitle("Y_Z");
    
    TH1F * hPtLep_3 = new TH1F("hPtLep_3", "Pt of Lep after selection step 3", 500 , -0.5 , 499.5 );
-   hPtLep_3->SetXTitle("pt_Lep1  (GeV)");
+   hPtLep_3->SetXTitle("pt_Lep  (GeV)");
    TH1F * hYLep_3 = new TH1F("hEtaLep_3", "Y of Lep after selection step 3", 500 , -5. , 5. );
-   hYLep_3->SetXTitle("Y of Lep2");
+   hYLep_3->SetXTitle("Y of Lep");
    TH1F * hIsoLep_3 = new TH1F("hIsoLep_3", "Isolation of Lep after selection step 3", 2000 , -10., 10.);
    hIsoLep_3->SetXTitle("Iso");
    TH1F * hSipLep_3 = new TH1F("hSipLep_3", "Sip of Lep after selection step 3",  1000 , -20. , 40. );
@@ -383,13 +385,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    
    TH1F * hPFMET_3 = new TH1F("hPFMET_3", "PF MET after selection step 3", 10000 , 0., 10000.);
    hPFMET_3->SetXTitle("PF MET");
-    
+   
    // Build the histo with constant log bin width   
    TH1F *hLogXPFMET_3             = new TH1F("hLogXPFMET_3","hLogXPFMET_3",NMBINS, logMbins);   
    hLogXPFMET_3->Sumw2();
    TH1F *hLogLinXPFMET_3             = new TH1F("hLogLinXPFMET_3","hLogLinXPFMET_3",NMOBINS, loglinMbins);
    hLogLinXPFMET_3->Sumw2();
-
 
    //step 5
    TH1F * hM4l_5 = new TH1F("hM4l_5", "Mass of four leptons after selection step 5", 1200, 4.5,1204.5 );
@@ -566,7 +567,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    hM4l_8->SetXTitle("4 lepton mass  (GeV)");
    TH1F * hM4l_8_100_800 = new TH1F("hM4l_8_100_800", "Mass of four leptons after selection step 8", 1200, 4.5,1204.5 );
    hM4l_8_100_800->SetXTitle("4 lepton mass  (GeV)");
-
    
    TH1F * hMZ1_8 = new TH1F("hMZ1_8", "Mass of Z1 after selection step 8", 200 , -0.5 , 199.5 );
    hMZ1_8->SetXTitle("mass_Z1  (GeV)");
@@ -661,6 +661,25 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TH1F * hPFMET_8 = new TH1F("hPFMET_8", "PF MET after selection step 8", 10000 , 0., 10000.);
    hPFMET_8->SetXTitle("PF MET");
    
+   TH1F * hM4l_T_8 = new TH1F("hM4l_T_8", "Transverse Mass of four leptons after full selection + MET", 1200, 4.5, 1204.5 );
+   hM4l_T_8->SetXTitle("m_{T} + PF MET (GeV)");
+   TH1F *hLogLinXM4l_T_8          = new TH1F("hLogLinXM4l_T_8","hLogLinXM4l_T_8",NMOBINS, loglinMbins);
+   hLogLinXM4l_T_8->Sumw2();
+
+   TH1F * hDPHI_8 = new TH1F("DPHI_8", "polar angle between 4l and E_{T,miss}", 1000, 0., 5. );
+   hDPHI_8->SetXTitle("#DELTA#phi(4l,E_{T,miss})");
+   
+   TH1D * hNgood_8 = new TH1D("hNgood", "Number of good leptons", 10, -0.5, 9.5);
+   hNgood_8->SetXTitle("# good leptons");
+   TH1D * hNbjets_8 = new TH1D("hNbjets", "Number of b jets", 10, -0.5, 9.5);
+   hNbjets_8->SetXTitle("# b-jets");    
+
+   // Build the histo with constant log bin width   
+   TH1F *hLogXPFMET_8             = new TH1F("hLogXPFMET_8","hLogXPFMET_8",NMBINS, logMbins);   
+   hLogXPFMET_8->Sumw2();
+   TH1F *hLogLinXPFMET_8          = new TH1F("hLogLinXPFMET_8","hLogLinXPFMET_8",NMOBINS, loglinMbins);
+   hLogLinXPFMET_8->Sumw2();
+
    TH1F * hPFMET_JetEnUp_8= new TH1F("hPFMET_JetEnUp_8", "PF MET after selection step 8", 10000 , 0., 10000.);
    hPFMET_JetEnUp_8->Sumw2();
    TH1F * hPFMET_JetEnDn_8= new TH1F("hPFMET_JetEnDn_8", "PF MET after selection step 8", 10000 , 0., 10000.);
@@ -687,31 +706,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    hPFMET_PhotonEnDn_8->Sumw2();
 
 
-   TH1F * hM4l_T_8 = new TH1F("hM4l_T_8", "Transverse Mass of four leptons after full selection + MET", 1200, 4.5, 1204.5 );
-   hM4l_T_8->SetXTitle("m_{T} + PF MET (GeV)");
-   TH1F *hLogLinXM4l_T_8          = new TH1F("hLogLinXM4l_T_8","hLogLinXM4l_T_8",NMOBINS, loglinMbins);
-   hLogLinXM4l_T_8->Sumw2();
 
-   TH1F * hDPHI_8 = new TH1F("DPHI_8", "polar angle between 4l and E_{T,miss}", 1000, 0., 5. );
-   hDPHI_8->SetXTitle("#DELTA#phi(4l,E_{T,miss})");
-   
-   TH1D * hNgood_8 = new TH1D("hNgood", "Number of good leptons", 10, -0.5, 9.5);
-   hNgood_8->SetXTitle("# good leptons");
-   TH1D * hNbjets_8 = new TH1D("hNbjets", "Number of b jets", 10, -0.5, 9.5);
-   hNbjets_8->SetXTitle("# b-jets");
-    
-   // Build the histo with constant log bin width   
-   TH1F* hLogXPFMET_8             = new TH1F("hLogXPFMET_8","hLogXPFMET_8",NMBINS, logMbins);   
-   hLogXPFMET_8->Sumw2();
-   TH1F *hLogLinXPFMET_8             = new TH1F("hLogLinXPFMET_8","hLogLinXPFMET_8",NMOBINS, loglinMbins);
-   hLogLinXPFMET_8->Sumw2();
-
-   // Step 8a with m4l window cut
+    // Step 8a with m4l window cut
    TH1F * hPFMET_8a = new TH1F("hPFMET_8a", "PF MET after selection step 8a", 10000 , 0., 10000.);
    hPFMET_8a->SetXTitle("PF MET (GeV)");   
    TH1F *hLogLinXPFMET_8a          = new TH1F("hLogLinXPFMET_8a","hLogLinXPFMET_8a",NMOBINS, loglinMbins);
-   hLogLinXPFMET_8a->Sumw2();   
-   
+   hLogLinXPFMET_8a->Sumw2();
+
    TH1F * hM4l_T_8a = new TH1F("hM4l_T_8a", "Transverse Mass of four leptons after full selection + MET", 1200, 4.5, 1204.5 );
    hM4l_T_8a->SetXTitle("m_{T} + PF MET (GeV)");
    
@@ -728,8 +729,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    hPFMET_8b->SetXTitle("PF MET (GeV)");   
    TH1F *hLogLinXPFMET_8b = new TH1F("hLogLinXPFMET_8b","hLogLinXPFMET_8b",NMOBINS, loglinMbins);
    hLogLinXPFMET_8b->Sumw2();   
-
-   // Step 9 with PFMET cut
+   
+   // Step 9 with PFMET cut   
    TH1F * hM4l_9 = new TH1F("hM4l_9", "Mass of four leptons after selection step 9", 1200, 4.5, 1204.5 );
    hM4l_9->SetXTitle("4 lepton mass  (GeV)");
    
@@ -806,24 +807,23 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TH1F * hLogLinXPFMET_PhotonEnDn_10= new TH1F("hLogLinXPFMET_PhotonEnDn_10", "hLogLinXPFMET_PhotonEnDn_10",NMOBINS, loglinMbins);
    hLogLinXPFMET_PhotonEnDn_10->Sumw2();
 
-
    TH1F * hM4l_T_10 = new TH1F("hM4l_T_10", "Transverse Mass of four leptons + MET after step 10", 10000, 0., 10000. );
    hM4l_T_10->SetXTitle("m_{T} + PF MET (GeV)");
    TH1F *hLogLinXM4l_T_10          = new TH1F("hLogLinXM4l_T_10","hLogLinXM4l_T_10",NMOBINS, loglinMbins);
    hLogLinXM4l_T_10->Sumw2();
-
+   
    TH1F * hDPHI_10 = new TH1F("DPHI_10", "polar angle between 4l and E_{T,miss} after step 10", 1000, 0., 5. );
    hDPHI_10->SetXTitle("#DELTA#phi(4l,E_{T,miss})");
 
    TH1F * hPtLep1_10 = new TH1F("hPtLep1_10", "Pt of Lep1 after selection step 10", 200 , -0.5 , 199.5 );
    hPtLep1_10->SetXTitle("pt_Lep1  (GeV)");  
-   
+
    TH1F * hPtLep2_10 = new TH1F("hPtLep2_10", "Pt of Lep2 after selection step 10", 200 , -0.5 , 199.5 );
    hPtLep2_10->SetXTitle("pt_Lep2  (GeV)");   
-   
+
    TH1F * hPtLep3_10 = new TH1F("hPtLep3_10", "Pt of Lep3 after selection step 10", 200 , -0.5 , 199.5 );
    hPtLep3_10->SetXTitle("pt_Lep3  (GeV)");  
-   
+
    TH1F * hPtLep4_10 = new TH1F("hPtLep4_10", "Pt of Lep4 after selection step 10", 200 , -0.5 , 199.5 );
    hPtLep4_10->SetXTitle("pt_Lep4  (GeV)");  
 
@@ -831,13 +831,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    hNgood_10->SetXTitle("# good leptons");
 
    TH1D * hNbjets_10 = new TH1D("hNbjets_10", "Number of b jets", 10, -0.5, 9.5);
-   hNbjets_10->SetXTitle("# b-jets");
-   
+   hNbjets_10->SetXTitle("# b-jets"); 
+
    // reverted mass peak cut
    TH1F * hPFMET_12 = new TH1F("hPFMET_12", "PF MET after selection step 12", 10000 , 0., 10000.);
    hPFMET_12->SetXTitle("PF MET (GeV)");  
    TH1F *hLogLinXPFMET_12 = new TH1F("hLogLinXPFMET_12","hLogLinXPFMET_12",NMOBINS, loglinMbins);
-   hLogLinXPFMET_12->Sumw2();	   
+   hLogLinXPFMET_12->Sumw2();
 
    //global histos (during step 2..)
    
@@ -884,7 +884,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TH1I * hVBF_PUID = new TH1I("hVBF_PUID", "PUID after step 8", 6,-1,4);
    hVBF_PUID->SetXTitle("PUID VBF");
 
-   //PFJET Plots   
+
+
+   //PFJET Plots
    /* TH1I * hN_PFJET_6 = new TH1I("hN_PFJET_6", "Number of PFJets after step 6", 102, 0, 102);
    hN_PFJET_6->SetXTitle("Number of Jets");
    TH1F * hChg_PFJET_6 = new TH1F("hChg_PFJET_6", "Charge of PFJets after step 6", 50, -10., 10.);
@@ -930,12 +932,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       
    TTree *newtree = new TTree("HZZ4LeptonsAnalysisReduced", "reduced ttree");
   
-   // Add branches to output rootuple 
-   Float_t f_weight, f_int_weight, f_pu_weight, f_eff_weight, f_lept1_pt, f_lept1_eta, f_lept1_phi, f_lept1_charge, f_lept1_pfx, f_lept1_sip, f_lept1_mvaid, f_lept2_pt, f_lept2_eta, f_lept2_phi, f_lept2_charge, f_lept2_pfx, f_lept2_sip, f_lept2_mvaid, f_lept3_pt, f_lept3_eta, f_lept3_phi, f_lept3_charge, f_lept3_pfx, f_lept3_sip, f_lept3_mvaid, f_lept4_pt, f_lept4_eta, f_lept4_phi, f_lept4_charge, f_lept4_pfx, f_lept4_sip, f_lept4_mvaid, f_iso_max, f_sip_max, f_Z1mass, f_Z2mass, f_angle_costhetastar, f_angle_costheta1, f_angle_costheta2, f_angle_phi, f_angle_phistar1, f_eta4l, f_pt4l, f_mass4l, f_mass4lErr, f_njets_pass, f_deltajj, f_massjj, f_D_jet, f_jet1_pt, f_jet1_eta, f_jet1_phi, f_jet1_e, f_jet2_pt, f_jet2_eta, f_jet2_phi, f_jet2_e, f_jet1_highpt_pt, f_jet1_highpt_eta, f_jet1_highpt_phi, f_jet1_highpt_e, f_jet2_highpt_pt, f_jet2_highpt_eta, f_jet2_highpt_phi, f_jet2_highpt_e, f_jet3_highpt_pt, f_jet3_highpt_eta, f_jet3_highpt_phi, f_jet3_highpt_e;;
+    // Add branches to output rootuple 
+   Float_t f_weight, f_int_weight, f_pu_weight, f_eff_weight, f_lept1_pt, f_lept1_eta, f_lept1_phi, f_lept1_charge, f_lept1_pfx, f_lept1_sip, f_lept1_mvaid, f_lept2_pt, f_lept2_eta, f_lept2_phi, f_lept2_charge, f_lept2_pfx, f_lept2_sip, f_lept2_mvaid, f_lept3_pt, f_lept3_eta, f_lept3_phi, f_lept3_charge, f_lept3_pfx, f_lept3_sip, f_lept3_mvaid, f_lept4_pt, f_lept4_eta, f_lept4_phi, f_lept4_charge, f_lept4_pfx, f_lept4_sip, f_lept4_mvaid, f_iso_max, f_sip_max, f_Z1mass, f_Z2mass, f_angle_costhetastar, f_angle_costheta1, f_angle_costheta2, f_angle_phi, f_angle_phistar1, f_eta4l, f_pt4l, f_mass4l, f_mass4lErr, f_njets_pass, f_deltajj, f_massjj, f_D_jet, f_jet1_pt, f_jet1_eta, f_jet1_phi, f_jet1_e, f_jet2_pt, f_jet2_eta, f_jet2_phi, f_jet2_e, f_jet1_highpt_pt, f_jet1_highpt_eta, f_jet1_highpt_phi, f_jet1_highpt_e, f_jet2_highpt_pt, f_jet2_highpt_eta, f_jet2_highpt_phi, f_jet2_highpt_e, f_jet3_highpt_pt, f_jet3_highpt_eta, f_jet3_highpt_phi, f_jet3_highpt_e, f_PU_vertices;
    Float_t f_D_bkg_kin,f_D_bkg,f_D_gg,f_D_g4,f_Djet_VAJHU; 
-   Float_t f_genmet, f_pfmet,f_mT,f_dphi;
+   Float_t f_genmet,f_pfmet,f_mT,f_dphi;
    Int_t f_lept1_pdgid,f_lept2_pdgid,f_lept3_pdgid,f_lept4_pdgid;
-   Int_t f_category,f_Ngood,f_Nbjets, f_PU_vertices;
+   Int_t f_category,f_Ngood,f_Nbjets;
 
    Int_t f_run, f_lumi, f_event;
 
@@ -958,7 +960,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    Float_t f_lhe_parton_pt[maxPartons], f_lhe_parton_eta[maxPartons], f_lhe_parton_phi[maxPartons], f_lhe_parton_e[maxPartons];
    Float_t f_lept1_pt_error, f_lept2_pt_error, f_lept3_pt_error, f_lept4_pt_error, f_jets_highpt_pt_error[maxJets], f_Djet_VAJHU_UncUp, f_Djet_VAJHU_UncDn;
    Float_t f_pfmet_JetEnUp, f_pfmet_JetEnDn, f_pfmet_ElectronEnUp, f_pfmet_ElectronEnDn, f_pfmet_MuonEnUp, f_pfmet_MuonEnDn, f_pfmet_JetResUp, f_pfmet_JetResDn, f_pfmet_UnclusteredEnUp, f_pfmet_UnclusteredEnDn, f_pfmet_PhotonEnUp, f_pfmet_PhotonEnDn;  
-   
+
    TBranch *b_run= newtree->Branch("f_run", &f_run,"f_run/I");
    TBranch *b_lumi= newtree->Branch("f_lumi", &f_lumi,"f_lumi/I");    
    TBranch *b_event= newtree->Branch("f_event", &f_event,"f_event/I");    
@@ -1090,7 +1092,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_lhe_parton_e = newtree->Branch("f_lhe_parton_e", &f_lhe_parton_e, Form("f_lhe_parton_e[%i]/F",maxPartons));
    
 
-
    TBranch *b_D_bkg_kin= newtree->Branch("f_D_bkg_kin", &f_D_bkg_kin,"f_D_bkg_kin/F");
    TBranch *b_D_bkg= newtree->Branch("f_D_bkg", &f_D_bkg,"f_D_bkg/F");
    TBranch *b_D_gg= newtree->Branch("f_D_gg", &f_D_gg,"f_D_gg/F");
@@ -1100,7 +1101,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_Djet_VAJHU_UncDn = newtree->Branch("f_Djet_VAJHU_UncDn", &f_Djet_VAJHU_UncDn,"f_Djet_VAJHU_UncDn/F");
 
    TBranch *b_pfmet= newtree->Branch("f_pfmet", &f_pfmet,"f_pfmet/F");
-   TBranch *b_pfmet_JetEnUp = newtree->Branch("f_pfmet_JetEnUp", &f_pfmet_JetEnUp, "f_pfmet_JetEnUp/F");
+    TBranch *b_pfmet_JetEnUp = newtree->Branch("f_pfmet_JetEnUp", &f_pfmet_JetEnUp, "f_pfmet_JetEnUp/F");
    TBranch *b_pfmet_JetEnDn = newtree->Branch("f_pfmet_JetEnDn", &f_pfmet_JetEnDn, "f_pfmet_JetEnDn/F");
    TBranch *b_pfmet_ElectronEnUp = newtree->Branch("f_pfmet_ElectronEnUp", &f_pfmet_ElectronEnUp, "f_pfmet_ElectronEnUp/F");
    TBranch *b_pfmet_ElectronEnDn = newtree->Branch("f_pfmet_ElectronEnDn", &f_pfmet_ElectronEnDn, "f_pfmet_ElectronEnDn/F");
@@ -1119,7 +1120,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_f_category= newtree->Branch("f_category", &f_category,"f_category/I");
    TBranch *b_f_Ngood= newtree->Branch("f_Ngood", &f_Ngood,"f_Ngood/I");
    TBranch *b_f_Nbjets=newtree->Branch("f_Nbjets", &f_Nbjets, "f_Nbjets/I");
-   TBranch *b_f_PU_vertices=newtree->Branch("f_PU_vertices", &f_PU_vertices, "f_PU_vertices/I");
+   TBranch *b_f_PU_vertices=newtree->Branch("f_PU_verticies", &f_PU_vertices, "f_PU_vertices/I");
    float newweight=1.;
    
    // New tree with clone of events passing the final selection
@@ -1140,12 +1141,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-      f_weight=1., f_int_weight=1., f_pu_weight=1., f_eff_weight=1., f_lept1_pt=-999., f_lept1_eta=-999., f_lept1_phi=-999., f_lept1_charge=-999., f_lept1_pfx=-999., f_lept1_sip=-999., f_lept1_mvaid=-999., f_lept2_pt=-999., f_lept2_eta=-999., f_lept2_phi=-999., f_lept2_charge=-999., f_lept2_pfx=-999., f_lept2_sip=-999., f_lept2_mvaid=-999., f_lept3_pt=-999., f_lept3_eta=-999., f_lept3_phi=-999., f_lept3_charge=-999., f_lept3_pfx=-999., f_lept3_sip=-999., f_lept3_mvaid=-999., f_lept4_pt=-999., f_lept4_eta=-999., f_lept4_phi=-999., f_lept4_charge=-999., f_lept4_pfx=-999., f_lept4_sip=-999., f_lept4_mvaid=-999., f_iso_max=-999., f_sip_max=-999., f_Z1mass=-999., f_Z2mass=-999., f_angle_costhetastar=-999., f_angle_costheta1=-999., f_angle_costheta2=-999., f_angle_phi=-999., f_angle_phistar1=-999., f_eta4l=-999., f_pt4l=-999., f_mass4l=-999., f_mass4lErr=-999., f_njets_pass=-999., f_deltajj=-999., f_massjj=-999., f_D_jet=-999., f_jet1_pt=-999., f_jet1_eta=-999., f_jet1_phi=-999., f_jet1_e=-999., f_jet2_pt=-999., f_jet2_eta=-999., f_jet2_phi=-999., f_jet2_e=-999.,f_D_bkg_kin=-999.,f_D_bkg=-999.,f_D_gg=-999.,f_D_g4=-999.,f_Djet_VAJHU=-999.,f_genmet=-999.,f_pfmet=-999.,f_mT=-999.,f_dphi=-999.,f_lept1_pdgid=-999,f_lept2_pdgid=-999,f_lept3_pdgid=-999,f_lept4_pdgid=-999,f_run=-999, f_lumi=-999, f_event=-999, f_category=-999,f_Ngood=-999, f_Nbjets=-999,f_jet1_highpt_pt=-999., f_jet1_highpt_eta=-999., f_jet1_highpt_phi=-999., f_jet1_highpt_e=-999., f_jet2_highpt_pt=-999., f_jet2_highpt_eta=-999., f_jet2_highpt_phi=-999., f_jet2_highpt_e=-999.,f_jet3_highpt_pt=-999., f_jet3_highpt_eta=-999., f_jet3_highpt_phi=-999., f_jet3_highpt_e=-999.;
+      // Initialize reduced tree variables
+      f_weight=1., f_int_weight=1., f_pu_weight=1., f_eff_weight=1., f_lept1_pt=-999., f_lept1_eta=-999., f_lept1_phi=-999., f_lept1_charge=-999., f_lept1_pfx=-999., f_lept1_sip=-999., f_lept1_mvaid=-999., f_lept2_pt=-999., f_lept2_eta=-999., f_lept2_phi=-999., f_lept2_charge=-999., f_lept2_pfx=-999., f_lept2_sip=-999., f_lept2_mvaid=-999., f_lept3_pt=-999., f_lept3_eta=-999., f_lept3_phi=-999., f_lept3_charge=-999., f_lept3_pfx=-999., f_lept3_sip=-999., f_lept3_mvaid=-999., f_lept4_pt=-999., f_lept4_eta=-999., f_lept4_phi=-999., f_lept4_charge=-999., f_lept4_pfx=-999., f_lept4_sip=-999., f_lept4_mvaid=-999., f_iso_max=-999., f_sip_max=-999., f_Z1mass=-999., f_Z2mass=-999., f_angle_costhetastar=-999., f_angle_costheta1=-999., f_angle_costheta2=-999., f_angle_phi=-999., f_angle_phistar1=-999., f_eta4l=-999., f_pt4l=-999., f_mass4l=-999., f_mass4lErr=-999., f_njets_pass=-999., f_deltajj=-999., f_massjj=-999., f_D_jet=-999., f_jet1_pt=-999., f_jet1_eta=-999., f_jet1_phi=-999., f_jet1_e=-999., f_jet2_pt=-999., f_jet2_eta=-999., f_jet2_phi=-999., f_jet2_e=-999.,f_D_bkg_kin=-999.,f_D_bkg=-999.,f_D_gg=-999.,f_D_g4=-999.,f_Djet_VAJHU=-999.,f_genmet=-999.,f_pfmet=-999.,f_mT=-999.,f_dphi=-999.,f_lept1_pdgid=-999,f_lept2_pdgid=-999,f_lept3_pdgid=-999,f_lept4_pdgid=-999,f_run=-999, f_lumi=-999, f_event=-999, f_category=-999, f_Ngood=-999, f_Nbjets=-999,f_jet1_highpt_pt=-999., f_jet1_highpt_eta=-999., f_jet1_highpt_phi=-999., f_jet1_highpt_e=-999., f_jet2_highpt_pt=-999., f_jet2_highpt_eta=-999., f_jet2_highpt_phi=-999., f_jet2_highpt_e=-999.,f_jet3_highpt_pt=-999., f_jet3_highpt_eta=-999., f_jet3_highpt_phi=-999., f_jet3_highpt_e=-999.,f_PU_vertices=-999.;
 
        //@
       f_lept1_pt_error=-999., f_lept2_pt_error=-999., f_lept3_pt_error=-999., f_lept4_pt_error=-999.;
       f_Djet_VAJHU_UncUp = -999, f_Djet_VAJHU_UncDn = -999;
-      f_pfmet_JetEnUp = -999., f_pfmet_JetEnDn = -999., f_pfmet_ElectronEnUp = -999., f_pfmet_ElectronEnDn = -999., f_pfmet_MuonEnUp = -999., f_pfmet_MuonEnDn = -999., f_pfmet_JetResUp = -999., f_pfmet_JetResDn = -999., f_pfmet_UnclusteredEnUp = -999., f_pfmet_UnclusteredEnDn = -999., f_pfmet_PhotonEnUp = -999., f_pfmet_PhotonEnDn = -999., f_PU_vertices = -999.;
+      f_pfmet_JetEnUp = -999., f_pfmet_JetEnDn = -999., f_pfmet_ElectronEnUp = -999., f_pfmet_ElectronEnDn = -999., f_pfmet_MuonEnUp = -999., f_pfmet_MuonEnDn = -999., f_pfmet_JetResUp = -999., f_pfmet_JetResDn = -999., f_pfmet_UnclusteredEnUp = -999., f_pfmet_UnclusteredEnDn = -999., f_pfmet_PhotonEnUp = -999., f_pfmet_PhotonEnDn = -999.;
       for(unsigned int ijet=0; ijet<maxJets; ++ijet){
         f_jets_highpt_charged_hadron_multiplicity[ijet] = -999;
         f_jets_highpt_charged_multiplicity[ijet] = -999;
@@ -1220,9 +1222,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	}
       }
 
-      //if (!(Run==1 && LumiSection==2536 && Event==486622)) continue;
+      //if (!(Run==1 && LumiSection==2355 && Event==451989)) continue;
       //if(!(Run==257531 && LumiSection==121 && Event==178979541)) continue;
-
+ 
       if(jentry%1 == 5000) cout << "Analyzing entry: " << jentry << endl;
       
 
@@ -1235,7 +1237,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       newweight=weight;
       cout << "Starting weight= " << newweight << endl;
 
-      // pT gen reweighting                                                                                                                                                                          
+      // pT gen reweighting                                                                                                                                                                           
       double pT_weight=1.;
       if ( ( datasetBase.Contains("2HDM") || datasetBase.Contains("Baryonic") ) && datasetBase.Contains("Target") ){
         if (MC_PT[0] > 0.) {
@@ -1247,12 +1249,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
           cout << "No pT reweighting of 2HDM samples" << endl;
         }
       }
-      // Changing the weight for gen reweighting                 
+      // Changing the weight for gen reweighting                                                                                                                                        
       newweight=weight*pT_weight;
       cout << "Starting weight + pT gen = " << newweight << endl;
 
       // pileup reweighting 2012 and 2011
-      if (DATA_type=="NO" && num_PU_vertices < 0) continue;                                     
+      if (DATA_type=="NO" && num_PU_vertices < 0) continue; 
+
       hPUvertices->Fill(num_PU_vertices,weight);
 
       // pileup reweighting 2016
@@ -1273,24 +1276,23 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
       // Changing the weight for pileup
       newweight=weight*pT_weight*pu_weight;
-      cout << "Starting weight + pT gen + pileup = " << newweight << endl;
-           
-      
+      cout << "Starting weight + pTgen + pileup = " << newweight << endl;
+
       // ggZZ kfactor
       double ggzz_kf_wgt[9];
       float  weight_kfactor=1.;
       if (DATA_type=="NO"){
         //if( datasetName.Contains("GluGluHToZZ")){
-        //  for(int f=0;f<9;f++) ggzz_kf_wgt[f] = ggZZ_kf[f]->Eval(MC_MASS[0]); // Evaluate at the true m4l                   
-        //  weight_kfactor=ggzz_kf_wgt[0]; // Using the nominal one                                                             
+        //  for(int f=0;f<9;f++) ggzz_kf_wgt[f] = ggZZ_kf[f]->Eval(MC_MASS[0]); // Evaluate at the true m4l 
+        //  weight_kfactor=ggzz_kf_wgt[0]; // Using the nominal one                                       
         //  newweight=weight*pT_weight*pu_weight*weight_kfactor;
         //}
         if ( datasetName.Contains("GluGluToZZ") ||  datasetName.Contains("GluGluToContinToZZ")){
-          for(int f=0;f<9;f++) ggzz_kf_wgt[f] = ggZZ_kf[f]->Eval(MC_ZZ_MASS[0][0]); // Evaluate at the true m4l               
-          weight_kfactor=ggzz_kf_wgt[0]; // Using the nominal one                                                               
+          for(int f=0;f<9;f++) ggzz_kf_wgt[f] = ggZZ_kf[f]->Eval(MC_ZZ_MASS[0][0]); // Evaluate at the true m4l    
+          weight_kfactor=ggzz_kf_wgt[0]; // Using the nominal one                                                  
           newweight=weight*pT_weight*pu_weight*weight_kfactor;
         }
-        //weight_kfactor=2.3;                       
+        //weight_kfactor=2.3;                                                                                                   
       }
 
       // qqZZ kfactor
@@ -1314,10 +1316,10 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       // Weight for MCNLO samples                                                                                      
       if( datasetName.Contains("amcatnlo")) {
         cout << "Reweighting sample of amcatnlo with weight= " << MC_weighting << endl;
-        newweight=weight*pT_weight*pu_weight*MC_weighting;
+        if (MC_weighting!=0) newweight=weight*pT_weight*pu_weight*weight_kfactor*MC_weighting;
       }
 
-      
+                 
       float pFill[11];for(int pf=0;pf<11;pf++)pFill[11]=-999.;
 
       // ** Step 0:
@@ -1339,7 +1341,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       //MC_PDGID[5]  the l3+  mu- = 13  e- = 11
       //MC_PDGID[6]  the l4-  mu+ = -13  e+ = -11
      
-      bool is2e2mu=false;
+      bool is4e=false;
 
       if( isSignal && debug ) cout << "\n ** Step 0.1 (MC truth): "
 				   << "\nMC_PDGID[0] " << MC_PDGID[0]
@@ -1352,20 +1354,15 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 				   << endl ;
       
       
+      //
       if (isSignal || isggH){
-        if( ( MC_PDGID[3] == 13 && MC_PDGID[4] == -13  &&  MC_PDGID[5] == 11 && MC_PDGID[6] == -11 )
-            || ( MC_PDGID[3] == 11 && MC_PDGID[4] == -11  &&  MC_PDGID[5] == 13 && MC_PDGID[6] == -13 )){
-          //if( ( MC_PDGID[3] == 13 && MC_PDGID[4] == -13  &&  MC_PDGID[5] == 15 && MC_PDGID[6] == -15 ) // 2l2tau
-          //|| ( MC_PDGID[3] == 11 && MC_PDGID[4] == -11  &&  MC_PDGID[5] == 15 && MC_PDGID[6] == -15 ) 
-          //|| ( MC_PDGID[3] == 15 && MC_PDGID[4] == -15  &&  MC_PDGID[5] == 11 && MC_PDGID[6] == -11 )
-          //|| ( MC_PDGID[3] == 15 && MC_PDGID[4] == -15  &&  MC_PDGID[5] == 13 && MC_PDGID[6] == -13 )
-          //|| ( MC_PDGID[3] == 15 && MC_PDGID[4] == -15  &&  MC_PDGID[5] == 15 && MC_PDGID[6] == -15 )
-          //){
-          is2e2mu=true;
-          ++N_01 ;  // fill counter                                                                                                                                             
-          N_01_w=N_01_w+newweight;
-        }
-        //else continue;
+	if( MC_PDGID[3] == 11 && MC_PDGID[4] == -11  
+	    && MC_PDGID[5] == 11 && MC_PDGID[6] == -11 ){
+	  is4e=true;
+	  ++N_01 ;  // fill counter 
+	  N_01_w=N_01_w+newweight;
+	}
+	//else continue;
 	
 	
 	// ** Step 0.2:
@@ -1381,37 +1378,30 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 			   << "\n MC_PT[i]" << MC_PT[i]	
 			   << endl ;
 	  
-	  //if( fabs(MC_PDGID[i]) == 13 && ( fabs(MC_ETA[i]) >= 2.4 || MC_PT[i] <= 5. ) ){
-          if( fabs(MC_PDGID[i]) == 13 && ( fabs(MC_ETA[i]) >= 2.4) ){
-            isInAcceptance = 0;
-            break;        
-          }
-          //if( fabs(MC_PDGID[i]) == 11 && ( fabs(MC_ETA[i]) >= 2.5 || MC_PT[i] <= 7. ) ){
-          if( fabs(MC_PDGID[i]) == 11 && ( fabs(MC_ETA[i]) >= 2.5) ){
-	    
+	  //if( (isSignal || isvbf) && (fabs(MC_ETA[i]) >= 2.4 || MC_PT[i] <= 5.) ){ 
+	  if( (fabs(MC_ETA[i]) >= 2.4) ){ // only eta cut NEW
 	    isInAcceptance = 0;
 	    break;        
 	  }
 	  
 	}// end for leptons
 	
-	if( is2e2mu && isInAcceptance )       {
+	if( is4e && isInAcceptance )       {
 	  ++N_02 ;  // fill counter
 	  N_02_w=N_02_w+newweight;
 	}
 	//else continue;	
       }
-     
+      
       ++N_1 ;  // fill counter
       N_1_w=N_1_w+newweight;
       
-      
+
       // Effective AREA
       bool tag_2011=false;
       if (DATA_type=="2010" || DATA_type=="2011" || MC_type=="Fall11"){
-        tag_2011=true;
+	tag_2011=true;
       }
-      
       
       // Loose lepton identification
       
@@ -1459,6 +1449,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	
       } // end loop on muons
 
+      
       int* arraysize_e = new int[1];
       arraysize_e[0] = RECO_NELE;
       int iL_loose_e[arraysize_e[0]];
@@ -1479,7 +1470,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        	
  	if( RECOELE_PT[i] > 7. 
 	    && fabs(RECOELE_ETA[i]) < 2.5 
-	    // && RECOELE_gsftrack_expected_inner_hits[i]<=1  not used anymore
+	    //&& RECOELE_gsftrack_expected_inner_hits[i]<=1  // nto used anymore
 	    && fabs(RECOELE_gsftrack_dxy[i]) < .5 
 	    && fabs(RECOELE_gsftrack_dz[i]) < 1. 
 	    ) {	  
@@ -1505,14 +1496,14 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       
       for(int e = 0; e < RECO_NELE; ++e)
       	for(int mu = 0; mu < RECO_NMU; ++mu){
-	  
+	  	 
 	  if( (RECOMU_isPFMu[mu] || (RECOMU_isTrackerHighPtMu[mu] && RECOMU_PT[mu] > 200.))
 	      && (RECOMU_isGlobalMu[mu] || (RECOMU_isTrackerMu[mu] && RECOMU_numberOfMatches[mu]>0))
 	      && RECOMU_mubesttrkType[mu]!=2
 	      && RECOMU_PT[mu] > 5. 
 	      && fabs(RECOMU_ETA[mu]) < 2.4 
 	      && fabs(RECOMU_mubesttrkDxy[mu]) < .5 && fabs(RECOMU_mubesttrkDz[mu]) < 1. 
-	      && fabs(RECOMU_SIP[mu])<4. // TightID + SIP cut
+	      && fabs(RECOMU_SIP[mu])<4.  // TightID + SIP cut
 	      );
 	  else continue;
 	  
@@ -1520,7 +1511,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  
 	  if( deltaR <= 0.05 ){
 	    
-	    if( debug )cout << "Electrom not passing the cross cleaning" << endl;
+	    if( debug )cout << "Electron not passing the cross cleaning" << endl;
 	    
 	    RECOELE_PT[e]  = -0.01;
 	    RECOELE_ETA[e] = -99.;
@@ -1581,7 +1572,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       ++N_2 ;  // fill counter
       N_2_w=N_2_w+newweight;
 
-    
+   
       
       /// *** FSR
       // Photon identification & cleaning
@@ -1605,14 +1596,18 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       		  << "\nfabs(RECOELE_ETA[i]) " << fabs(RECOELE_ETA[i])
 		  << "\nfabs(RECOELE_scl_Eta[i]) " << fabs(RECOELE_scl_Eta[i])
       		  << "\nRECOELE_PFX_rho[i] " << RECOELE_PFX_rho[i]
+			 << "\n chHad= " <<  RECOELE_PFchHad[i]                       
+			 << "\n neuHad= " << RECOELE_PFneuHad[i]
+			 << "\n photon= " <<  RECOELE_PFphoton[i]
+                         << "\n PU= " << RECOELE_PFPUchAllPart[i]
       		  << "\nfabs( RECOELE_SIP[i] ) " << fabs( RECOELE_SIP[i] )
       		  << "\nRECOELE_mvaNonTrigV0[i] " << RECOELE_mvaNonTrigV0[i]
 		  << "\nfabs( RECOELE_gsftrack_dxy[i] ) " << fabs( RECOELE_gsftrack_dxy[i] )
       		  << "\nfabs( RECOELE_gsftrack_dz[i] ) " << fabs( RECOELE_gsftrack_dz[i] )
 		  << endl ;
        	
- 	if( RECOELE_PT[i] > 7. && fabs(RECOELE_ETA[i]) < 2.5 );
-	  // && RECOELE_gsftrack_expected_inner_hits[i]<=1 ) /* ok */ ;
+ 	if( RECOELE_PT[i] > 7. && fabs(RECOELE_ETA[i]) < 2.5  ) ;
+	  //&& RECOELE_gsftrack_expected_inner_hits[i]<=1 ) /* ok */ ;
 	else continue ;
 	
 	bool BDT_ok = 0; // Spring16 with CMSSW_8_2_0
@@ -1654,19 +1649,19 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 		  << "\niLe[7]: " << iLe[7]
 		  << "\nNumber of good eles: " << Ne_good
 		  << endl ;
-            
+
+
       // Define a new isolation array to allocate the contribution of photons
-      // float RECOMU_PFX_dB_new[100],RECOELE_PFX_rho_new[100];
+      //float RECOMU_PFX_dB_new[100],RECOELE_PFX_rho_new[100];
       for (int i=0;i<100;i++){
 	RECOMU_PFX_dB_new[i]=RECOMU_PFX_dB[i];
-	RECOELE_PFX_rho_new[i]=RECOELE_PFX_rho[i];	
+	RECOELE_PFX_rho_new[i]=RECOELE_PFX_rho[i];
       }
       //
-
-
+      
       // photon definition & cleaning:
       int iLp[30];
-      	for( int i = 0 ; i < 30 ; ++i )iLp[i] = -1;
+      for( int i = 0 ; i < 30 ; ++i )iLp[i] = -1;
       
       int Nphotons = 0;
 
@@ -1679,17 +1674,17 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 			 << "\n RECOPFPHOT_PFX_rho[i] " << RECOPFPHOT_PFX_rho[i]
 			 << endl ;
 	
-	if ( RECOPFPHOT_PT[i] > 2. && fabs(RECOPFPHOT_ETA[i]) < 2.4 && RECOPFPHOT_PFX_rho[i]<1.8) {
+	if ( RECOPFPHOT_PT[i] > 2. && fabs(RECOPFPHOT_ETA[i]) < 2.4 && RECOPFPHOT_PFX_rho[i]<1.8 ) {
 	  
 	  bool is_clean = 1;
 	  
 	  // cleaning
 	  for(int e = 0; e < N_loose_e; ++e){
-  	    if (fabs( RECOELE_SIP[iL_loose_e[e]])>=4.) continue;  // loose ID + SIP cut	    
+  	    if (fabs( RECOELE_SIP[iL_loose_e[e]])>=4.) continue;  // loose ID + SIP cut
 	    double deltaPhi = DELTAPHI( RECOPFPHOT_PHI[i] , RECOELE_scl_Phi[iL_loose_e[e]] ) ;
 	    double deltaEta = fabs( RECOPFPHOT_ETA[i] - RECOELE_scl_Eta[iL_loose_e[e]] );
 	    double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[i] , RECOELE_scl_Phi[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[i] - RECOELE_scl_Eta[iL_loose_e[e]],2) );
-	    cout << "debug: " << RECOELE_PT[iL_loose_e[e]] << " " << deltaPhi << " " << deltaEta << " " << deltaR << endl;
+	    
 	    if( ( fabs(deltaPhi) < 2 && fabs(deltaEta) < 0.05 ) || deltaR <= 0.15 ){		  
 	      if( debug )cout << "Photon not passing the electron cleaning" << endl;	
 	      is_clean = 0;	  
@@ -1739,7 +1734,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	for(int l = 0; l < N_loose_mu; ++l){ // loop on muons
 	  if (fabs(RECOMU_SIP[iL_loose_mu[l]])>=4.) continue;  //loose ID + SIP cut
 	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOMU_PHI[iL_loose_mu[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOMU_ETA[iL_loose_mu[l]],2) );
-	  cout << "DeltaR= " << deltaR << " " <<  deltaR/pow(RECOPFPHOT_PT[iLp[i]],2) << endl;
 	  if(!(deltaR < 0.5 && deltaR/pow(RECOPFPHOT_PT[iLp[i]],2)<0.012) ) continue;
 	  if( deltaR<min_deltaR) { // the closest lepton
 	    cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to a muon with pT= " << RECOMU_PT[iL_loose_mu[l]]<< endl;
@@ -1751,9 +1745,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	}//end loop on muons  
 	
 	for(int l = 0; l < N_loose_e; ++l){ // loop on electrons
-	  if (fabs(RECOELE_SIP[iL_loose_e[l]])>=4.) continue;  //loose ID + SIP cut
+	  if (fabs(RECOELE_SIP[iL_loose_e[l]])>=4.) continue;  //loose ID + SIP cut	  
 	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_PHI[iL_loose_e[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_ETA[iL_loose_e[l]],2) );
-	  cout << "DeltaR= " << deltaR << " " <<  deltaR/pow(RECOPFPHOT_PT[iLp[i]],2) << endl;
+	  //cout << "DeltaR= " << deltaR << " " << deltaR/pow(RECOPFPHOT_PT[iLp[i]],2) << endl;
 	  if(!(deltaR < 0.5 && deltaR/pow(RECOPFPHOT_PT[iLp[i]],2)<0.012) ) continue;
 	  if( deltaR<min_deltaR) { // the closest lepton
 	    cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to an electron with pT= " << RECOELE_PT[iL_loose_e[l]]<< endl;
@@ -1763,18 +1757,19 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  }
 	  
 	}//end loop on electrons  
-
 	
+       
 	if( min_deltaR < 0.5 ){
-	  if (tag_min_deltaR==0) iLp_l[ i ] = iL_loose_mu[l_min_deltaR];
-	  if (tag_min_deltaR==1) iLp_l[ i ] = iL_loose_e[l_min_deltaR];
-	  iLp_tagEM[ i ] = tag_min_deltaR;
-	  RECOPFPHOT_DR[iLp[i]]=min_deltaR; 	
-	}
-
+	    if (tag_min_deltaR==0) iLp_l[ i ] = iL_loose_mu[l_min_deltaR];
+	    if (tag_min_deltaR==1) iLp_l[ i ] = iL_loose_e[l_min_deltaR];
+	    iLp_tagEM[ i ] = tag_min_deltaR;
+	    RECOPFPHOT_DR[iLp[i]]=min_deltaR; 	  
+	}	
       }
+
       
-      if( debug ) cout << "Indeces of loose leptons associated to photons: "
+      
+      if( debug ) cout << "Indeces of Tight leptons associated to photons: "
 		       << "\niLp_l[0]: " << iLp_l[0]
 		       << "\niLp_l[1]: " << iLp_l[1]
 		       << "\niLp_l[2]: " << iLp_l[2]
@@ -1796,6 +1791,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 		  << "\niLp_tagEM[7]: " << iLp_tagEM[7]
 		  << endl ;
 
+      // for(int i=0.;i<Nphotons;i++) {
+      // 	if (iLp_l[i]!=-1 && iLp_tagEM[i]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " attached to an electron with pT= " << RECOELE_PT[iLp_l[i]] << endl;
+      // };
 
       // Multiple photons associated to the same lepton: the lowest-ΔR(γ,l)/ETγ2 has to be selected.
       double min_deltaR_ET2=1000;
@@ -1871,6 +1869,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	
       }	
      
+
       
       if( debug ) cout << "Indeces of loose leptons associated to the photon with lowest DeltaR/ET2: "
 		       << "\niLp_l[0]: " << iLp_l[0]
@@ -1894,18 +1893,16 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 		       << "\niLp_tagEM[7]: " << iLp_tagEM[7]
 		       << endl ;
 
-      
       for(int i=0.;i<Nphotons;i++) {
-	if (iLp_l[i]!=-1 && iLp_tagEM[i]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[i]] << endl;
-	if (iLp_l[i]!=-1 && iLp_tagEM[i]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " attached to an electron with pT= " << RECOELE_PT[iLp_l[i]] << endl;
-      };
-
-       // Exclude that photon from the isolation cone all leptons in the event passing loose ID + SIP cut if it was in the isolation cone and outside the isolation veto (ΔR>0.01 for muons and (ele->supercluster()->eta() < 1.479 || dR > 0.08) for electrons
+       	if (iLp_l[i]!=-1 && iLp_tagEM[i]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " attached to an electron with pT= " << RECOELE_PT[iLp_l[i]] << endl;
+      };           
       
-      cout << "Rho for electron pileup isolation correction is= " << RHO_ele << endl;
-      double EffectiveArea=-9999.;
 
-	    
+      // Exclude that photon from the isolation cone all leptons in the event passing loose ID + SIP cut if it was in the isolation cone and outside the isolation veto (ΔR>0.01 for muons and (ele->supercluster()->eta() < 1.479 || dR > 0.08) for electrons
+
+      double EffectiveArea=-9999.;
+      cout << "Rho for electron pileup isolation correction is= " << RHO_ele << endl;
+      
       for(int i=0.;i<Nphotons;i++) {
 	if (iLp_l[i]==-1) continue;
 	
@@ -1915,7 +1912,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  //double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_scl_Phi[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_scl_Eta[iL_loose_e[e]],2) );
 	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_PHI[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_ETA[iL_loose_e[e]],2) );
 	  cout << "deltaR for photon subtraction= " << deltaR << endl;
-	  if( deltaR<=0.3 && (RECOELE_scl_Eta[iL_loose_e[e]]< 1.479 || deltaR>0.08) ){ // 0.3 in 76x              
+	  if( deltaR<=0.3 && (RECOELE_scl_Eta[iL_loose_e[e]]< 1.479 || deltaR>0.08) ){ // 0.4 is the isolation cone for electrons in 74x -> 0.3 in 76x              
 	    if( debug )cout << "Subtracting the photon isolation from the electron isolation value " << endl;
 	    
 	    EffectiveArea=EAele(iL_loose_e[e],tag_2011);
@@ -1934,7 +1931,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  cout << "deltaR for photon subtraction= " << deltaR << endl;
 	  if( deltaR<=0.3 && deltaR>0.01){ // 0.3 is the isolation cone for muons in 76x
 	    if( debug )cout << "Subtracting the photon isolation from the muon isolation value " << endl;
-	    
+		    
 	    RECOMU_PFX_dB_new[iL_loose_mu[l]]=
               (RECOMU_PFchHad[iL_loose_mu[l]]+
                max(0.,RECOMU_PFneuHad[iL_loose_mu[l]]+
@@ -1945,13 +1942,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	} // end loop on mu
 	
 	
-	
       }	
       
-      
+     
       // *** end FSR
       
-      
+
       // **** Step 3:
       struct candidateZ {
 	float massvalue;
@@ -1975,7 +1971,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	float EZ;
 	bool withFSR;
 	float ptFSR;
-	int tag;
       };
 
       vector<candidateZ> Zcandvector;
@@ -1985,11 +1980,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
       // a) pair #1: mass closest to Z1
       // b) mLL in ] 40,120 [
-      if( debug ) cout  << "\nStep 3: Number of good leptons: " << N_good+Ne_good << endl;
+      if( debug ) cout  << "\nStep 3: Number of good leptons: " << Ne_good << endl;
  
-      if( N_good + Ne_good < 2 ) continue ; 	
-
-      int Zxx_tag = 0;    // 1: Zmumu  ,  2: Zee
+      if( Ne_good < 2 ) continue ; 	
 
       int i1 = -1; //index of the first lepton (from Z1)
       int j1 = -1; //index of the second lepton (from Z1)
@@ -1999,196 +1992,16 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       bool has_FSR_Z1 = 0;
       TLorentzVector Lepton1,Lepton2,DiLepton,LeptonCorrection;
 
-      for(int i = 0; i < N_good; ++i){
-        for(int j = i + 1; j < N_good; ++j){
-	  if (fabs(RECOMU_SIP[iL[i]])>=4.) continue; // SIP cut
-	  if (fabs(RECOMU_SIP[iL[j]])>=4.) continue;
-	  if (fabs(RECOMU_PFX_dB_new[iL[i]])>=0.35) continue; // Isolation
-	  if (fabs(RECOMU_PFX_dB_new[iL[j]])>=0.35) continue;
-	  
-	  if(RECOMU_CHARGE[ iL[j] ] == RECOMU_CHARGE[ iL[i] ]) continue; // opposite charge
-
-	  cout << "\n Pairing muons with pT= " << RECOMU_PT[ iL[i] ] << " and " <<  RECOMU_PT[ iL[j] ] << endl;
-		  
-	  // evaluate the mass &
-	  double pxZ, pyZ, pzZ;
-	  double EZ;
-	  double massZ;
-	  double massZ_noFSR = 0;
-	  
-	  int tempphotid=-1;
-	  int templepid=-1;
-
-	  float pTphot=-999.;
-	  Lepton1.SetPtEtaPhiM(RECOMU_PT[iL[i]], RECOMU_ETA[iL[i]], RECOMU_PHI[iL[i]], 0.105);
-	  Lepton2.SetPtEtaPhiM(RECOMU_PT[iL[j]], RECOMU_ETA[iL[j]], RECOMU_PHI[iL[j]], 0.105);
-	  DiLepton=Lepton1+Lepton2;	  
-	  massZ = DiLepton.M();	  
-	  massZ_noFSR = massZ;
-	  if (debug) cout << "Mass Z= " << massZ << endl;
-	  pxZ=DiLepton.Px();
-	  pyZ=DiLepton.Py();
-	  pzZ=DiLepton.Pz();
-	  EZ=DiLepton.E();	  
-	 
-	  Zxx_tag=1;	 
-
-	  // ** Association of FSR to Z
-	  if( debug ) cout  << "Step Z+FSR  " << endl;
-	  
-	  bool has_FSR_Z = 0;
-	  int N_FSR_Z = 0;
-	  double max_pt_FSR_Z = -1.;
-	  int pi = -1; 
-	  int pj = -1;
-	  
-	  
-	  for( int p = 0; p < Nphotons; ++p ){
-	    
-	    if( iLp_l[ p ] == iL[i] && iLp_tagEM[ p ] == 0 )  {  // exists a photon associated to a lepton mu
-	      cout << "Attaching a photon to muon and then to the Z" << endl;
-	      // evaluate the mass
-	      LeptonCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
-	      Lepton1=Lepton1+LeptonCorrection;
-	      DiLepton=Lepton1+Lepton2;
-	      double mllp=DiLepton.M();
-	      pxZ=DiLepton.Px();
-	      pyZ=DiLepton.Py();
-	      pzZ=DiLepton.Pz();
-	      EZ=DiLepton.E();	      	    
-
-	      //cout << mllp << " " << Zmass << " " << massZ << endl;
-	      pi = p; 
-	      has_FSR_Z = 1;
-	      ++N_FSR_Z;
-	      if( RECOPFPHOT_PT[iLp[p]] > max_pt_FSR_Z ) max_pt_FSR_Z = RECOPFPHOT_PT[iLp[p]];
-	      massZ=mllp;
-
-	      cout << "Mass Z with FSR= "<< massZ << endl;
-
-	    }
-	    if( iLp_l[ p ] == iL[j] && iLp_tagEM[ p ] == 0 )  { 
-	      cout << "Attaching a photon to muon and then to the Z" << endl;
-	      // evaluate the mass
-	      LeptonCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
-	      Lepton2=Lepton2+LeptonCorrection;
-	      DiLepton=Lepton1+Lepton2;
-	      double mllp=DiLepton.M();
-	      pxZ=DiLepton.Px();
-	      pyZ=DiLepton.Py();
-	      pzZ=DiLepton.Pz();
-	      EZ=DiLepton.E();
-
-	      //cout << mllp << " " << Zmass << " " << massZ << endl;
-	      pj = p;
-	      has_FSR_Z = 1;
-	      ++N_FSR_Z; 
-	      if( RECOPFPHOT_PT[iLp[p]] > max_pt_FSR_Z ) max_pt_FSR_Z = RECOPFPHOT_PT[iLp[p]];
-	      massZ=mllp;
-
-	      cout << "Mass Z with FSR= "<< massZ << endl;
-
-	    }
-	  } // end loop on FSR photons
-
-	 
-	  
-	  
-	  if( debug && has_FSR_Z) {
-	    cout  << " Z has FSR! " << endl;
-	    cout  << "  N_FSR_Z " << N_FSR_Z << endl;
-	    cout  << "  max_pt of photon FSR_Z " << max_pt_FSR_Z << endl;
-	    if( pi > -1 ) cout  << "  pi " << pi << " --> index photon: " << iLp[pi] << " associated lepton: " << iLp_l[pi] << " (= "<< iL[i]<<" ? )  tag: " << iLp_tagEM[pi] << endl;
-	    if( pj > -1 ) cout  << "  pj " << pj << " --> index photon: " << iLp[pj] << " associated lepton: " << iLp_l[pj] << " (= "<< iL[j]<<" ? )  tag: " << iLp_tagEM[pj] << endl;
-	  }
-	  else {
-	    cout << "No FSR photon attached" << endl;
-	  }
-	  
-	  
-	  if( has_FSR_Z ){ // if Z has FSR
-	    
-	    ++N_3_FSR; // fill the counter
-	    N_3_FSR_w=N_3_FSR_w+newweight;
-	    	    
-	    // do not recompute isolation here
-	    if( debug ) cout  << "Z Isolation (not corrected for photon): "
-                              << "\n RECOMU_PFX_dB[ iL[i] ] " << RECOMU_PFX_dB[ iL[i] ]
-                              << "\n RECOMU_PFX_dB[ iL[j] ] " << RECOMU_PFX_dB[ iL[j] ]
-                              << endl;
-	    	   
-	    if( pi != -1 ){
-	      //double deltaR_i = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[pi]] , RECOMU_PHI[iL[i]] ),2) + pow(RECOPFPHOT_ETA[iLp[pi]] - RECOMU_ETA[iL[i]],2) );
-              //if( deltaR_i < 0.4 && deltaR_i > 0.01 )
-	      pTphot=RECOPFPHOT_PT[iLp[pi]];	      
-	    }
-	    else if( pj != -1 ){	      
-              //double deltaR_j = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[pj]] , RECOMU_PHI[iL[j]] ),2) + pow(RECOPFPHOT_ETA[iLp[pj]] - RECOMU_ETA[iL[j]],2) );
-              //if( deltaR_j < 0.4 && deltaR_j > 0.01 )
-	      pTphot=RECOPFPHOT_PT[iLp[pj]];	      
-	    }
-
- 
-	  } // end if has FSR
-	  else{
-	    if( debug ) cout  << "Z Isolation: "  
-			      << "\n RECOMU_PFX_dB_new[ iL[i] ] " << RECOMU_PFX_dB_new[ iL[i] ]
-			      << "\n RECOMU_PFX_dB_new[ iL[j] ] " << RECOMU_PFX_dB_new[ iL[j] ]
-			      << endl;	    
-	  }
-	  // ** end association of FSR to Z
-	  
-	  //if( massZ == 0 || i1 == -1 || j1 == -1) continue;
-	  
-	  cout << "2mu2e: " << Zxx_tag << endl; 
-	  
-	  cout << "Filling a struct for Z" << endl; 
-	  candidateZ *Z = new candidateZ;
-	  Z->massvalue=massZ;
-	  Z->ilept1=iL[i];
-	  Z->ilept2=iL[j];
-	  Z->pt1=RECOMU_PT[iL[i]];
-	  Z->pt2=RECOMU_PT[iL[j]];
-	  Z->eta1=RECOMU_ETA[iL[i]];
-	  Z->eta2=RECOMU_ETA[iL[j]];
-	  Z->phi1=RECOMU_PHI[iL[i]];
-	  Z->phi2=RECOMU_PHI[iL[j]];
-	  Z->charge1=RECOMU_CHARGE[iL[i]];
-	  Z->charge2=RECOMU_CHARGE[iL[j]];
-	  Z->isol1=RECOMU_PFX_dB_new[ iL[i] ];
-	  Z->isol2=RECOMU_PFX_dB_new[ iL[j] ];
-	  if( pi != -1 ) Z->ilept1_FSR=true;
-	  if( pj != -1 ) Z->ilept2_FSR=true;
-	  Z->pxZ=pxZ;
-	  Z->pyZ=pyZ;
-	  Z->pzZ=pzZ;
-	  Z->EZ=EZ;
-	  if( has_FSR_Z ) {
-	    Z->withFSR=1;
-	    Z->ptFSR=pTphot;	    
-	  }	      
-	  else {
-	    Z->withFSR=0;
-	    Z->ptFSR=0.;
-	  }
-	  Z->tag=Zxx_tag;
-	  	 	  
-	  Zcandvector.push_back(*Z);	  
-	  
-	}
-      } // end loop on pairs
-
-      // 2mu2e
       for(int i = 0; i < Ne_good; ++i){
         for(int j = i + 1; j < Ne_good; ++j){
-	  if (fabs(RECOELE_SIP[iLe[i]])>=4.) continue; // SIP cut
+	  if (fabs(RECOELE_SIP[iLe[i]])>=4.) continue;
 	  if (fabs(RECOELE_SIP[iLe[j]])>=4.) continue;
 	  if (fabs(RECOELE_PFX_rho_new[iLe[i]])>=0.35) continue; // Isolation cut
 	  if (fabs(RECOELE_PFX_rho_new[iLe[j]])>=0.35) continue;
 	  
 	  if(RECOELE_CHARGE[ iLe[j] ] == RECOELE_CHARGE[ iLe[i] ]) continue; // opposite charge
 
-	  cout << "\n Pairing electrons with pT= " << RECOELE_PT[ iLe[i] ] << " and " <<  RECOELE_PT[ iLe[j] ] << endl;
+	  cout << "Pairing electrons with pT= " << RECOELE_PT[ iLe[i] ] << " and " <<  RECOELE_PT[ iLe[j] ] << endl;
 	  
 	  // evaluate the mass &
 	  double pxZ, pyZ, pzZ;
@@ -2196,10 +2009,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  double massZ;
 	  double massZ_noFSR = 0;
 	  
-	 
 	  int tempphotid=-1;
 	  int templepid=-1;
-	  
+
 	  float pTphot=-999.;
 	  Lepton1.SetPtEtaPhiM(RECOELE_PT[iLe[i]], RECOELE_ETA[iLe[i]], RECOELE_PHI[iLe[i]], 0.000511);
 	  Lepton2.SetPtEtaPhiM(RECOELE_PT[iLe[j]], RECOELE_ETA[iLe[j]], RECOELE_PHI[iLe[j]], 0.000511);
@@ -2211,9 +2023,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  pyZ=DiLepton.Py();
 	  pzZ=DiLepton.Pz();
 	  EZ=DiLepton.E();
-	  
-	  Zxx_tag=2;
-	
+	  	  	 
 	  // ** Association of FSR to Z
 	  if( debug ) cout  << "Step Z+FSR  " << endl;
 	  
@@ -2225,7 +2035,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  
 	  
 	  for( int p = 0; p < Nphotons; ++p ){
-	    if( iLp_l[ p ] == iLe[i] && iLp_tagEM[ p ] == 1 )  {  // exit a photon associated to a lepton electron
+	    if( iLp_l[ p ] == iLe[i] && iLp_tagEM[ p ] == 1 )  {  // exists a photon associated to a lepton electron
 	      
 	      // evaluate the mass
 	      LeptonCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
@@ -2244,7 +2054,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      massZ=mllp;
 
 	      cout << "Mass Z with FSR= "<< massZ << endl;
-		      
+	      
 	    }
 	    
 	    if( iLp_l[ p ] == iLe[j] && iLp_tagEM[ p ] == 1 )  { 
@@ -2266,11 +2076,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      massZ=mllp;
 
 	      cout << "Mass Z with FSR= "<< massZ << endl;
-
+	      
 	    }
 	  } // end loop on FSR photons
-	  
-	  
+
+	 
 	  
 	  //if( has_FSR_Z ) debug = 1;
 	  
@@ -2289,14 +2099,14 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  if( has_FSR_Z ){ // if Z has FSR
 	    
 	    ++N_3_FSR; // fill the counter
-	    N_3_FSR_w=N_3_FSR_w+newweight;	    
-	    
+	    N_3_FSR_w=N_3_FSR_w+newweight;
+	    	    
 	    // do not recompute isolation here
 	    if( debug ) cout  << "Z Isolation (not corrected for photon): "
                               << "\n RECOELE_PFX_rho[ iLe[i] ] " << RECOELE_PFX_rho[ iLe[i] ]
                               << "\n RECOELE_PFX_rho[ iLe[j] ] " << RECOELE_PFX_rho[ iLe[j] ]
                               << endl;
-	    
+	    	   
 	    if( pi != -1 ){
 	      //double deltaR_i = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[pi]] , RECOELE_PHI[iLe[i]] ),2) + pow(RECOPFPHOT_ETA[iLp[pi]] - RECOELE_ETA[iLe[i]],2) );
               //if( deltaR_i < 0.4 && deltaR_i > 0.01 )
@@ -2307,22 +2117,21 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
               //if( deltaR_j < 0.4 && deltaR_j > 0.01 )
 	      pTphot=RECOPFPHOT_PT[iLp[pj]];	      
 	    }
-	    
-	    
+
+ 
 	  } // end if has FSR
 	  else{
 	    
 	    if( debug ) cout  << "Z Isolation: "  
 			      << "\n RECOELE_PFX_rho_new[ iLe[i] ] " << RECOELE_PFX_rho_new[ iLe[i] ]
 			      << "\n RECOELE_PFX_rho_new[ iLe[j] ] " << RECOELE_PFX_rho_new[ iLe[j] ]
-			      << endl;	    
+			      << endl;
+	    
 	  }
 	  // ** end association of FSR to Z
 	  
 	  //if( massZ == 0 || i1 == -1 || j1 == -1) continue;
 	  
-	  cout << "2e2mu: " << Zxx_tag << endl;
-	   
 	  cout << "Filling a struct for Z" << endl; 
 	  candidateZ *Z = new candidateZ;
 	  Z->massvalue=massZ;
@@ -2352,19 +2161,17 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	    Z->withFSR=0;
 	    Z->ptFSR=0.;
 	  }
-	  	 
-	  Z->tag=Zxx_tag;
+	  	 	  
 	  Zcandvector.push_back(*Z);	  
 	  
 	}
       } // end loop on couples
       
-      
+     
       if (Zcandvector.size()<2) {
 	cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
 	continue; 
       }
-      
 
       ++N_3a ;  // fill counter
       N_3a_w=N_3a_w+newweight;
@@ -2375,7 +2182,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       Zcandisolmassvector.clear();
 
       for (int index=0; index<Zcandvector.size();index++){
-	if (!(Zcandvector.at(index).massvalue > 12 && Zcandvector.at(index).massvalue < 120)) continue;
+	if (!(Zcandvector.at(index).massvalue > 12. && Zcandvector.at(index).massvalue < 120.)) continue;
 	cout << "Z passing the 12 < mll < 120 cut with mass= " << Zcandvector.at(index).massvalue<< endl;
 	Zcandisolmassvector.push_back(Zcandvector.at(index));
       };
@@ -2386,113 +2193,97 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       }
 
       cout << "Number of Z passing the isolation and the 12 << mll < 120 cut is= " << Zcandisolmassvector.size() << endl;
-
+      
       ++N_3b ;  // fill counter
       N_3b_w=N_3b_w+newweight;
-        
-      Double_t eff_weight_3;
       
+      Double_t eff_weight_3;
+
       // MZ and PFMET
       for (int index=0; index<Zcandisolmassvector.size();index++){
-
-        int ipt1_3;
+	int ipt1_3;
         int ipt2_3;
-
         ipt1_3 = Zcandisolmassvector.at(index).ilept1; 
         ipt2_3  = Zcandisolmassvector.at(index).ilept2; 
-
+	
         // Execute Efficiency Reweighting
         int z1lept[2]={ipt1_3,ipt2_3};
-
-        if (Zcandisolmassvector.at(index).tag==1){ //Z->mumu
-          for(int i = 0; i < 2; ++i){
-            Double_t Pt = RECOMU_PT[ z1lept[i] ]; 
-            Double_t Eta = RECOMU_ETA[ z1lept[i] ]; 
-            
-            if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-              Int_t biny = mu_scale_2016->GetYaxis()->FindBin(Pt);
-              Int_t binx = mu_scale_2016->GetXaxis()->FindBin(Eta);
-              if (mu_scale_2016->GetBinContent(binx,biny)>0.) eff_weight_3*=mu_scale_2016->GetBinContent(binx,biny); 
+	
+        for(int i = 0; i < 2; ++i){
+          Double_t Pt = RECOELE_PT[ z1lept[i] ]; 
+          Double_t Eta = RECOELE_ETA[ z1lept[i] ]; 
+          
+          if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
+	    
+            if(RECOELE_isGap[ z1lept[i] ]==0){
+              Int_t binx = ele_scale_factors2016->GetXaxis()->FindBin(Eta);
+              Int_t biny = ele_scale_factors2016->GetYaxis()->FindBin(Pt);
+              if (ele_scale_factors2016->GetBinContent(binx,biny)>0.) eff_weight_3*=ele_scale_factors2016->GetBinContent(binx,biny); 
             }
+            else if(RECOELE_isGap[ z1lept[i] ]==1){
+              Int_t binx = ele_scale_factors_gap2016->GetXaxis()->FindBin(Eta);
+              Int_t biny = ele_scale_factors_gap2016->GetYaxis()->FindBin(Pt);
+              if (ele_scale_factors_gap2016->GetBinContent(binx,biny)>0.) eff_weight_3*=ele_scale_factors_gap2016->GetBinContent(binx,biny); 
+            }
+	    
           }
         }
-        else if (Zcandisolmassvector.at(index).tag==2){ //Z->ee
-          for(int i = 0; i < 2; ++i){
-            Double_t Pt = RECOELE_PT[ z1lept[i] ]; 
-            Double_t Eta = RECOELE_ETA[ z1lept[i] ]; 
-            
-            if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-              
-              if(RECOELE_isGap[ z1lept[i] ]==0){
-                Int_t binx = ele_scale_factors2016->GetXaxis()->FindBin(Eta);
-                Int_t biny = ele_scale_factors2016->GetYaxis()->FindBin(Pt);
-                if (ele_scale_factors2016->GetBinContent(binx,biny)>0.) eff_weight_3*=ele_scale_factors2016->GetBinContent(binx,biny); 
-              }
-              else if(RECOELE_isGap[ z1lept[i] ]==1){
-                Int_t binx = ele_scale_factors_gap2016->GetXaxis()->FindBin(Eta);
-                Int_t biny = ele_scale_factors_gap2016->GetYaxis()->FindBin(Pt);
-                if (ele_scale_factors_gap2016->GetBinContent(binx,biny)>0.) eff_weight_3*=ele_scale_factors_gap2016->GetBinContent(binx,biny); 
-              }
-              
-            }
-          }
-        }
-
+	
         // Changing the weight for pileup and efficiency
         if (DATA_type == "2016") eff_weight_3=1.; 
         if (eff_weight_3>0.) newweight=weight*pT_weight*pu_weight*weight_kfactor*eff_weight_3;
 	else newweight=weight*pT_weight*pu_weight*weight_kfactor;
-
-        hMZ_3->Fill(Zcandisolmassvector.at(index).massvalue,newweight );
-
+	
+	hMZ_3->Fill(Zcandisolmassvector.at(index).massvalue,newweight );
       }
+
       hPFMET_3->Fill(RECO_PFMET,newweight);
       hLogXPFMET_3->Fill(RECO_PFMET,newweight); 
       hLogLinXPFMET_3->Fill(RECO_PFMET,newweight);
 
       cout << "Starting weight + pileup + efficiency= " << newweight << endl;
       if(debug) cout << "Efficiency Weight for the Z1: " << eff_weight_3 << " Final weight for Z1= " << newweight << endl;
-
+     
       /*
       //z1tree->Fill();
       
-      
+   
       int ipt1_3;
       int ipt2_3;
-      if( RECOMU_PT[ iL[i1] ] > RECOMU_PT[ iL[j1] ] ){ ipt1_3 = iL[i1]; ipt2_3  = iL[j1]; }
-      else { ipt1_3 = iL[j1]; ipt2_3  = iL[i1]; }
+      if( RECOELE_PT[ iLe[i1] ] > RECOELE_PT[ iLe[j1] ] ){ ipt1_3 = iLe[i1]; ipt2_3  = iLe[j1]; }
+      else { ipt1_3 = iLe[j1]; ipt2_3  = iLe[i1]; }
       
-      hPtLep1_3->Fill( RECOMU_PT[ ipt1_3 ],newweight );
-      hYLep1_3->Fill( RECOMU_ETA[ ipt1_3 ],newweight );
-      hIsoLep1_3->Fill( RECOMU_PFX_dB[ ipt1_3 ],newweight );
-      hSipLep1_3->Fill( RECOMU_SIP[ ipt1_3 ],newweight );
-      hIpLep1_3->Fill( RECOMU_IP[ ipt1_3 ],newweight );
-      hIpErLep1_3->Fill( RECOMU_IPERROR[ ipt1_3 ],newweight );
+      hPtLep1_3->Fill( RECOELE_PT[ ipt1_3 ],newweight );
+      hYLep1_3->Fill( RECOELE_ETA[ ipt1_3 ],newweight );
+      hIsoLep1_3->Fill( RECOELE_PFX_rho[ ipt1_3 ],newweight );
+      hSipLep1_3->Fill( RECOELE_SIP[ ipt1_3 ],newweight );
+      hIpLep1_3->Fill( RECOELE_IP[ ipt1_3 ],newweight );
+      hIpErLep1_3->Fill( RECOELE_IPERROR[ ipt1_3 ],newweight );
       
       
-      hPtLep2_3->Fill( RECOMU_PT[ ipt2_3 ],newweight );
-      hYLep2_3->Fill( RECOMU_ETA[ ipt2_3 ],newweight );
-      hIsoLep2_3->Fill( RECOMU_PFX_dB[ ipt2_3 ],newweight );
-      hSipLep2_3->Fill( RECOMU_SIP[ ipt2_3 ],newweight );
-      hIpLep2_3->Fill( RECOMU_IP[ ipt2_3 ],newweight );
-      hIpErLep2_3->Fill( RECOMU_IPERROR[ ipt2_3 ],newweight );
+      hPtLep2_3->Fill( RECOELE_PT[ ipt2_3 ],newweight );
+      hYLep2_3->Fill( RECOELE_ETA[ ipt2_3 ],newweight );
+      hIsoLep2_3->Fill( RECOELE_PFX_rho[ ipt2_3 ],newweight );
+      hSipLep2_3->Fill( RECOELE_SIP[ ipt2_3 ],newweight );
+      hIpLep2_3->Fill( RECOELE_IP[ ipt2_3 ],newweight );
+      hIpErLep2_3->Fill( RECOELE_IPERROR[ ipt2_3 ],newweight );
 
       
       float max_Iso_3 = -1 ;
       float max_Sip_3 = -1 ;
       float max_Ip_3 = -1 ;
 
-      for (int i=0;i<RECO_NMU;i++) {
-	if (i==iL[i1] || i==iL[j1]) continue;
-	if( RECOMU_isPFMu[i] 
-	    && ( RECOMU_isGlobalMu[i] || RECOMU_isTrackerMu[i] )
-	    && ( RECOMU_isTrackerMu[i] && !RECOMU_isGlobalMu[i] && RECOMU_trkmuArbitration[i] )
-	    && RECOMU_PT[i] > 5. && fabs(RECOMU_ETA[i]) < 2.4 
-	    && fabs(RECOMU_mubesttrkDxy[i]) < .5 && fabs(RECOMU_mubesttrkDz[i]) < 1.
-	    ){
-	  if( RECOMU_PFX_dB[i] > max_Iso_3 ) max_Iso_3 = RECOMU_PFX_dB[i] ;
-	  if( fabs( RECOMU_SIP[i] ) > max_Sip_3 ) max_Sip_3 = fabs( RECOMU_SIP[i] ) ;
-	  if( fabs( RECOMU_IP[i] ) > max_Ip_3 ) max_Ip_3 = fabs( RECOMU_IP[i] ) ;
+      for (int i=0;i<RECO_NELE;i++) {
+	if (i==iLe[i1] || i==iLe[j1]) continue;
+	 if( RECOELE_PT[i] > 7. 
+            && fabs(RECOELE_ETA[i]) < 2.5 
+//            && RECOELE_gsftrack_expected_inner_hits[i]<=1 
+            && fabs(RECOELE_gsftrack_dxy[i]) < .5 
+            && fabs(RECOELE_gsftrack_dz[i]) < 1. 
+            ) {   
+	  if( RECOELE_PFX_rho[i] > max_Iso_3 ) max_Iso_3 = RECOELE_PFX_rho[i] ;
+	  if( fabs( RECOELE_SIP[i] ) > max_Sip_3 ) max_Sip_3 = fabs( RECOELE_SIP[i] ) ;
+	  if( fabs( RECOELE_IP[i] ) > max_Ip_3 ) max_Ip_3 = fabs( RECOELE_IP[i] ) ;
 	}
       }
 
@@ -2517,20 +2308,20 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
 	  //Check that jet has deltaR>0.4 away from any tight lepton 
 	  
-	  for(int mu = 0; mu < N_good; ++mu){
-	    if (RECOMU_SIP[iL[mu]]>=4.) continue;
-	    if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
-	    deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
-	    cout << "1st lepton: " <<" deltaR "<< deltaR_3 <<endl;
-	    if (deltaR_3<0.4){
-	      jetfail_3[i]=1;
-	      cout << " jetfail " << jetfail_3[i] <<endl;
-	    }
-	  }
+	   for(int mu = 0; mu < N_good; ++mu){
+            if (RECOMU_SIP[iL[mu]]>=4.) continue;
+            if (RECOMU_PFX_dB[iL[mu]]>=0.35) continue;
+            deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+            cout << "1st lepton: " <<" deltaR "<< deltaR_3 <<endl;
+            if (deltaR_3<0.4){
+              jetfail_3[i]=1;
+              cout << " jetfail " << jetfail_3[i] <<endl;
+            }
+          }
 
 	  for(int ele = 0; ele < Ne_good; ++ele){
 	    if (RECOELE_SIP[iLe[ele]]>=4.) continue;
-	    if (RECOELE_PFX_rho[iLe[[ele]]>=0.5) continue;
+	    if (RECOELE_PFX_rho_new[iLe[[ele]]>=0.5) continue;
 	    deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
 	    cout << "1st lepton: " <<" deltaR "<< deltaR_3 <<endl;
 	    if (deltaR_3<0.4){
@@ -2599,6 +2390,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       }
       */
 
+      
       // **** Step 4:
        // a) 4 leptons
       // b) pair #2
@@ -2629,8 +2421,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       */
       bool has_FSR_Z2 = 0;
       
-      // if( N_good < 4 ) continue ; 
-     
       // ZZ object pairs
       array<int,2> isolgoodZs;
       vector<std::array<int, 2> > isolgoodZsv;
@@ -2648,7 +2438,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	
 	
 	for (int j=i+1;j<Zcandisolmassvector.size();j++){
-	  if (Zcandisolmassvector.at(i).tag==Zcandisolmassvector.at(j).tag) continue;	// select only 2e2mu pairs 
 	  cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
 	  cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
@@ -2691,13 +2480,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
       //cout << "Debug ZZ= " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(0) ).massvalue << " " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(1)).massvalue << endl;
       if (isolgoodZsv.size()==0) {
-	cout << "No ZZ (2e2mu) combination passing the cuts  ...exiting " << endl;
+	cout << "No ZZ combination passing the cuts  ...exiting " << endl;
 	continue;
       }
-      
+
       ++N_4a ;  // fill counter
       N_4a_w=N_4a_w+newweight;
-      
+ 
       // PT,20/10 for any di-lepton
       vector<candidateZ> firstpTcleanedgoodZ;    
       vector<float> leptonspTcleaned;
@@ -2727,12 +2516,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
 
       // **** Step 6:
-      // QCD suppression: mll>4 GeV cut on all OS- any flavour pairs (4/4)
+      // QCD suppression: mll>4 GeV cut on all OS-SF pairs (4/4)
       
       double min_mass_2L = 10000.;
       TLorentzVector Lepton1qcd,Lepton2qcd,DiLeptonQCD;
-      vector<int> ileptonsmumu,ileptonsee,ileptonsemu;
-
+      vector<int> ileptonsee;
+      
       array<int,2> iqcdcleanedgoodZs;
       vector<std::array<int, 2> > iqcdcleanedgoodZsv;
       vector<candidateZ> pTcleanedgoodZ; 
@@ -2743,60 +2532,31 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	     << Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).massvalue
 	     << endl;
 	min_mass_2L = 10000.;
-	ileptonsmumu.clear();
 	ileptonsee.clear();
-	ileptonsemu.clear();
+       
+	ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept1);
+	ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept2);
+	ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept1);
+	ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept2);
 	
-	if (Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).tag==1){	  
-	  ileptonsmumu.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept1);
-	  ileptonsmumu.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept2);
-	  ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept1);
-	  ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept2);
-	}
-	else if (goodZ.at(ileptonspTcleanedgoodZsv.at(l).at(0)).tag==2){
-	  cout << "Checking ee pairs for QCD rejection" << endl;
-	  ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept1);
-	  ileptonsee.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).ilept2);
-	  ileptonsmumu.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept1);
-	  ileptonsmumu.push_back(Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).ilept2);
-	}
-
 	double mass;
 	
-	// mumu
-	cout << "Checking mumu pairs for QCD rejection" << endl;
-	Lepton1qcd.SetPtEtaPhiM(RECOMU_PT[ileptonsmumu.at(0)], RECOMU_ETA[ileptonsmumu.at(0)], RECOMU_PHI[ileptonsmumu.at(0)], 0.105);
-	Lepton2qcd.SetPtEtaPhiM(RECOMU_PT[ileptonsmumu.at(1)], RECOMU_ETA[ileptonsmumu.at(1)], RECOMU_PHI[ileptonsmumu.at(1)], 0.105);
-	DiLeptonQCD=Lepton1qcd+Lepton2qcd;       
-	mass = DiLeptonQCD.M();
-	cout << "Mass of mumu for QCD rejection= " << mass << endl;
-	if( mass < min_mass_2L ) min_mass_2L = mass ;	
+	// ee
+	cout << "Checking ee pairs for QCD rejection" << endl;
 
-	// ee	
-	cout << "Checking ee pairs for QCD rejection" << endl;       
-	Lepton1qcd.SetPtEtaPhiM(RECOELE_PT[ileptonsee.at(0)], RECOELE_ETA[ileptonsee.at(0)], RECOELE_PHI[ileptonsee.at(0)], 0.000511);
-	Lepton2qcd.SetPtEtaPhiM(RECOELE_PT[ileptonsee.at(1)], RECOELE_ETA[ileptonsee.at(1)], RECOELE_PHI[ileptonsee.at(1)], 0.000511);
-	DiLeptonQCD=Lepton1qcd+Lepton2qcd;       
-	mass = DiLeptonQCD.M();
-	cout << "Mass of ee for QCD rejection= " << mass << endl;
-	if( mass < min_mass_2L ) min_mass_2L = mass ;	  
-	
-
-	//emu
-	cout << "Checking emu pairs for QCD rejection" << endl;
-
-	for (int i=0;i<2;i++){ 
-	  for (int j=0;j<2;j++){
+	for (int i=0;i<4;i++){ 
+	  for (int j=i+1;j<4;j++){
 	    
-	    if ( RECOMU_CHARGE[ileptonsmumu.at(i)] == RECOELE_CHARGE[ileptonsee.at(j)] ) continue; // shoud be OS	  
+	    if ( RECOELE_CHARGE[ileptonsee.at(i)] == RECOELE_CHARGE[ileptonsee.at(j)] ) continue; // shoud be OS	  
 	    // evaluate the mass
 	    double mass;
 	    
-	    Lepton1qcd.SetPtEtaPhiM(RECOMU_PT[ileptonsmumu.at(i)], RECOMU_ETA[ileptonsmumu.at(i)], RECOMU_PHI[ileptonsmumu.at(i)], 0.105);
+	    Lepton1qcd.SetPtEtaPhiM(RECOELE_PT[ileptonsee.at(i)], RECOELE_ETA[ileptonsee.at(i)], RECOELE_PHI[ileptonsee.at(i)], 0.000511);
 	    Lepton2qcd.SetPtEtaPhiM(RECOELE_PT[ileptonsee.at(j)], RECOELE_ETA[ileptonsee.at(j)], RECOELE_PHI[ileptonsee.at(j)], 0.000511);
+
 	    DiLeptonQCD=Lepton1qcd+Lepton2qcd;       
 	    mass = DiLeptonQCD.M();
-	    cout << "Mass of emu for QCD rejection= " << mass << endl;
+	    cout << "Mass of ee for QCD rejection= " << mass << endl;
 	    if( mass < min_mass_2L ) min_mass_2L = mass ;
 	  }
 	}
@@ -2816,6 +2576,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	
       }
             
+     
       
       // Z1 selection
       double pxZ1 = 0;  //Z1 kinematics
@@ -2830,7 +2591,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       int indexlep1Z1 = -1;
       int indexlep2Z1 = -1;
       int indexZ1= -1;
-      int Z1tag=-999;
       
       // Choice of Z1 as the closest to the Z mass
       for (int i=0;i<pTcleanedgoodZ.size();++i){
@@ -2851,9 +2611,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  Y_Z1 = 0.5 * log ( (EZ1 + pzZ1)/(EZ1 - pzZ1) );
 	  indexlep1Z1=pTcleanedgoodZ.at(i).ilept1;
 	  indexlep2Z1=pTcleanedgoodZ.at(i).ilept2;
-	  Z1tag=pTcleanedgoodZ.at(i).tag;
 	}
-      }
+      } 
       
       if (massZ1 < 40.) {
 	cout << "The mass of Z1 is < 40 GeV...exiting" << endl;
@@ -2870,32 +2629,114 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 			<< "\n massZ1 " << massZ1
 			<< "\n indexlep1 " << indexlep1Z1
 			<< "\n indexlep2 " << indexlep2Z1
-			<< "\n indexZ1 " << indexZ1 
-			<< "\n Z1 tag (1 for 2mu and 2 for 2e) " << Z1tag
 		    
 			<< endl;
       
+      
+      // vector<candidateZ> pTcleanedgoodZ_nosharedlept;
+      // pTcleanedgoodZ_nosharedlept.push_back(pTcleanedgoodZ.at(indexZ1));
+      
+      // for (int i=0;i<pTcleanedgoodZ.size();i++){
+      //   if ( pTcleanedgoodZ.at(i).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(i).ilept1==indexlep2Z1 ||  
+      // 	    pTcleanedgoodZ.at(i).ilept2==indexlep1Z1 || pTcleanedgoodZ.at(i).ilept2==indexlep2Z1
+      // 	    ) continue;
+      //   pTcleanedgoodZ_nosharedlept.push_back(pTcleanedgoodZ.at(i));
+      // }
+      
+      // for (int i=0;i<pTcleanedgoodZ_nosharedlept.size();i++){
+      //   cout << "Z Mass surviving= " << pTcleanedgoodZ_nosharedlept.at(i).massvalue << endl;
+      // }
+      
+      // vector<candidateZ> pTcleanedgoodZ_noZ1;
+      // for (int i=0;i<pTcleanedgoodZ.size();i++){
+      //   if (pTcleanedgoodZ.at(i).massvalue == massZ1 ) continue; 
+      //   pTcleanedgoodZ_noZ1.push_back(pTcleanedgoodZ.at(i));
+      //   cout << "Z Mass surviving _ no Z1 " << pTcleanedgoodZ.at(i).massvalue << endl;                                                                              
+      // }
       
       // ZZ objects with alternative pairing
       array<int,2> icleanedgoodZs;
       vector<std::array<int, 2> > icleanedgoodZsv;
       
       for (int i=0;i<pTcleanedgoodZ.size();i++){
+	
+	
+	float lepton1ch=-999., lepton2ch=-999.;
+	lepton1ch=pTcleanedgoodZ.at(i).charge1;
+	lepton2ch=pTcleanedgoodZ.at(i).charge2;
+	
+	TLorentzVector Lepton1,Lepton2,Lepton1Correction,Lepton2Correction;
+	
+	Lepton1.SetPtEtaPhiM(pTcleanedgoodZ.at(i).pt1, pTcleanedgoodZ.at(i).eta1, pTcleanedgoodZ.at(i).phi1, 0.000511);
+	
+	if (pTcleanedgoodZ.at(i).ilept1_FSR) {
+	  for( int p = 0; p < Nphotons; ++p ){
+	    if( iLp_l[ p ] == pTcleanedgoodZ.at(i).ilept1 && iLp_tagEM[ p ] == 1 ){
+	      Lepton1Correction.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
+	      Lepton1+=Lepton1Correction;
+	    }
+	  }
+	}	 
+	Lepton2.SetPtEtaPhiM(pTcleanedgoodZ.at(i).pt2, pTcleanedgoodZ.at(i).eta2, pTcleanedgoodZ.at(i).phi2, 0.000511);
+	if (pTcleanedgoodZ.at(i).ilept2_FSR) {
+	  for( int p = 0; p < Nphotons; ++p ){
+	    if( iLp_l[ p ] == pTcleanedgoodZ.at(i).ilept2 && iLp_tagEM[ p ] == 1 ){
+	      Lepton2Correction.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
+	      Lepton2+=Lepton2Correction;
+	    }
+	  }
+	}
+	
+	
 	for (int j=i+1;j<pTcleanedgoodZ.size();j++){
-	  if (pTcleanedgoodZ.at(j).tag==pTcleanedgoodZ.at(i).tag) continue; // we want 2e2mu or 2mu2e
-	  float massZa=-999.,massZb=-999.;
+	  float massZa=-999.,massZb=-999.;	 	 
 	  cout << "Masses= " << pTcleanedgoodZ.at(i).massvalue << " " << pTcleanedgoodZ.at(j).massvalue << endl;
-	  if (fabs(pTcleanedgoodZ.at(i).massvalue-Zmass) < fabs(pTcleanedgoodZ.at(j).massvalue-Zmass)) {
-	    massZa=pTcleanedgoodZ.at(i).massvalue;
-	    massZb=pTcleanedgoodZ.at(j).massvalue;
+	  
+	  float lepton3ch=-999., lepton4ch=-999.;
+	  lepton3ch=pTcleanedgoodZ.at(j).charge1;
+	  lepton4ch=pTcleanedgoodZ.at(j).charge2;
+	  
+	  TLorentzVector Lepton3,Lepton4,Lepton3Correction,Lepton4Correction,DiLeptonZa,DiLeptonZb;
+	  Lepton3.SetPtEtaPhiM(pTcleanedgoodZ.at(j).pt1, pTcleanedgoodZ.at(j).eta1, pTcleanedgoodZ.at(j).phi1, 0.000511);
+	  if (pTcleanedgoodZ.at(j).ilept1_FSR) {
+	    for( int p = 0; p < Nphotons; ++p ){
+	      if( iLp_l[ p ] == pTcleanedgoodZ.at(j).ilept1 && iLp_tagEM[ p ] == 1 ){
+		Lepton3Correction.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
+		Lepton3+=Lepton3Correction;
+	      }
+	    }
+	  }	 
+	  Lepton4.SetPtEtaPhiM(pTcleanedgoodZ.at(j).pt2, pTcleanedgoodZ.at(j).eta2, pTcleanedgoodZ.at(j).phi2, 0.000511);
+	  if (pTcleanedgoodZ.at(j).ilept2_FSR) {
+	    for( int p = 0; p < Nphotons; ++p ){
+	      if( iLp_l[ p ] == pTcleanedgoodZ.at(j).ilept2 && iLp_tagEM[ p ] == 1 ){
+		Lepton4Correction.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[p]],RECOPFPHOT_ETA[iLp[p]],RECOPFPHOT_PHI[iLp[p]],0);
+		Lepton4+=Lepton4Correction;
+	      }
+	    }
+	  }
+	  
+	  if (lepton1ch*lepton3ch<0){
+	    DiLeptonZa=Lepton1+Lepton3;
+	    DiLeptonZb=Lepton2+Lepton4;
+	  }  
+	  if (lepton1ch*lepton4ch<0){
+	    DiLeptonZa=Lepton1+Lepton4;
+	    DiLeptonZb=Lepton2+Lepton3;
+	  }
+	  
+	  if (fabs(DiLeptonZa.M()-Zmass) < fabs(DiLeptonZb.M()-Zmass)) {
+	    massZa=DiLeptonZa.M();
+	    massZb=DiLeptonZb.M();
 	  }
 	  else {
-	    massZa=pTcleanedgoodZ.at(j).massvalue;
-	    massZb=pTcleanedgoodZ.at(i).massvalue;
+	    massZa=DiLeptonZb.M();
+	    massZb=DiLeptonZa.M();
 	  }	  
 	  
-	  //  if ( fabs(massZa-Zmass) < fabs(massZ1-Zmass) && massZb<12) continue; // exclude those pairs   smart cut non needed for 2e2mu
 	  cout << "mass Za and b= " << massZa << " " << massZb << endl;
+	  if ( fabs(massZa-Zmass) < fabs(massZ1-Zmass) && massZb<12) continue; // exclude the original pairs
+	  
 	  //	 cout << "i j " << i << " " << j << endl;
 	  icleanedgoodZs={i,j};
 	  icleanedgoodZsv.push_back(icleanedgoodZs);
@@ -2905,15 +2746,15 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       cout << "How many ZZ objects are present? " << icleanedgoodZsv.size() << endl;
       if (icleanedgoodZsv.size()==0) continue;
       
-      // // sort Z by mass value                                                                                                                
-      // struct SortCandByClosestToZ {                                                                                                          
-      //   bool operator()( candidateZ c1, candidateZ c2) {                                                                                     
-      //          return (fabs(c1.massvalue - Zmass) < fabs(c2.massvalue - Zmass));                                                             
-      //   }                                                                                                                                    
-      // };                                                                                                                                     
-      // std::sort(vcandZ2.begin(),vcandZ2.end(),SortCandByClosestToZ());                                                                       
+      // // sort Z by mass value
+      // struct SortCandByClosestToZ {
+      //   bool operator()( candidateZ c1, candidateZ c2) {
+      //          return (fabs(c1.massvalue - Zmass) < fabs(c2.massvalue - Zmass));
+      //   }
+      // };
+      // std::sort(vcandZ2.begin(),vcandZ2.end(),SortCandByClosestToZ());                                                                                                       
       
-      double pxZ2 = 0;  //Z2 kinematics                                                                                                         
+      double pxZ2 = 0;  //Z2 kinematics                                                                                                                                         
       double pyZ2 = 0;
       double pzZ2 = 0;
       double ptZ2 = 0;
@@ -2925,26 +2766,18 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       int indexlep1Z2=-1;
       int indexlep2Z2=-1;
       int indexZ2=-1;
-      int Z2tag=-999;
       
       // identify pairs  Z1+Z2s
       vector<int> vindexZZ;
       for (int l=0;l<icleanedgoodZsv.size();l++){
-	cout << "Z+Z pairs with masses/indices: " 
-	     << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " and index " << icleanedgoodZsv.at(l).at(0) << " " 
-	     << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << " and index " << icleanedgoodZsv.at(l).at(1) << endl;
-	
-	if ( (icleanedgoodZsv.at(l).at(0)==indexZ1 
-	      //&&  
-	      //!(pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep1Z1 || 
-	      //  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep2Z1)
-	      ) 
+	cout << "Z+Z pairs with masses: " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
+	if ( (icleanedgoodZsv.at(l).at(0)==indexZ1 &&  
+	      !(pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep1Z1 || 
+		pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep2Z1)) 
 	     || 
-	     (icleanedgoodZsv.at(l).at(1)==indexZ1 
-	      //&& 
-	      //!(pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept2==indexlep1Z1 ||
-	      //  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept2==indexlep2Z1)
-	      )
+	     (icleanedgoodZsv.at(l).at(1)==indexZ1 && 
+	      !(pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept2==indexlep1Z1 ||
+		pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept2==indexlep2Z1))
 	     ) 
 	  {
 	    cout << "Found a Z1 + X  pair with no lepton shared with masses= " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
@@ -2964,6 +2797,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	cout << "more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons" << endl;
 	int indexZ2tmp=-999;
 	float sumpT=-999.,tmpsumpT=-999.;
+	
 	for (int ll=0;ll<vindexZZ.size();ll++){
 	  if (icleanedgoodZsv.at(vindexZZ.at(ll)).at(0)==indexZ1) indexZ2tmp=icleanedgoodZsv.at(vindexZZ.at(ll)).at(1);
 	  if (icleanedgoodZsv.at(vindexZZ.at(ll)).at(1)==indexZ1) indexZ2tmp=icleanedgoodZsv.at(vindexZZ.at(ll)).at(0);
@@ -2981,7 +2815,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      pTcleanedgoodZ.at(indexZ2tmp).pt2;
 	    if (tmpsumpT>sumpT) {
 	      sumpT=tmpsumpT;
-	      indexZ2=indexZ2tmp;
+	      indexZ2=indexZ2tmp;	     
 	    }
 	  }       
 	}
@@ -3001,13 +2835,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       Y_Z2 = 0.5 * log ( (EZ2 + pzZ2)/(EZ2 - pzZ2) );
       indexlep1Z2=pTcleanedgoodZ.at(indexZ2).ilept1;
       indexlep2Z2=pTcleanedgoodZ.at(indexZ2).ilept2;
-      Z2tag=pTcleanedgoodZ.at(indexZ2).tag;
       
       // Z1 and Z2 final 
       cout << "Z1 has index= " << indexZ1 << "  Z2 has index= " << indexZ2 << endl;
       
-      if (Z1tag==1) cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl; 
-      if (Z1tag==2) cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl; 
+      cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl; 
       
       if (std::isnan(massZ2)) {
 	cout << "No Z2 found" << endl;
@@ -3029,14 +2861,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       
       if( debug && has_FSR_Z2) {
       	cout  << " Z2 has FSR! " << endl;
-     	if (Z1tag==1) {
-	  cout  << "  pi " << pi2 << " --> index: " << iLp[pi2] << " associated lepton: " << iLp_l[pi2] << " (= "<< iL[i2]<<" ? )  tag: " << iLp_tagEM[pi2] << endl;
-	  cout  << "  pj " << pj2 << " --> index: " << iLp[pj2] << " associated lepton: " << iLp_l[pj2] << " (= "<< iL[j2]<<" ? )  tag: " << iLp_tagEM[pj2] << endl;
-	}
-	else if (Z1tag==0){
-	  cout  << "  pi " << pi2 << " --> index: " << iLp[pi2] << " associated lepton: " << iLp_l[pi2] << " (= "<< iLe[i2]<<" ? )  tag: " << iLp_tagEM[pi2] << endl;
-	  cout  << "  pj " << pj2 << " --> index: " << iLp[pj2] << " associated lepton: " << iLp_l[pj2] << " (= "<< iLe[j2]<<" ? )  tag: " << iLp_tagEM[pj2] << endl;
-	}
+     	cout  << "  pi " << pi2 << " --> index: " << iLp[pi2] << " associated lepton: " << iLp_l[pi2] << " (= "<< iLe[i2]<<" ? )  tag: " << iLp_tagEM[pi2] << endl;
+     	cout  << "  pj " << pj2 << " --> index: " << iLp[pj2] << " associated lepton: " << iLp_l[pj2] << " (= "<< iLe[j2]<<" ? )  tag: " << iLp_tagEM[pj2] << endl;
       }
       
       ++N_4b ;  // fill counter
@@ -3053,82 +2879,31 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       
       // **** Step 5:
 
-      // Execute Efficiency Reweighting
- 
-      int z1lept[2]={indexlep1Z1,indexlep2Z1};
-      int z2lept[2]={indexlep1Z2,indexlep2Z2};
+      // // Execute Efficiency Reweighting
+      int iL_4L[4] = {indexlep1Z1,indexlep2Z1,indexlep1Z2,indexlep2Z2};
 
       Double_t eff_weight = 1.;
       
-      if (Z1tag==1){ 
-        for(int i = 0; i < 2; ++i){
-          Double_t Pt = RECOMU_PT[ z1lept[i] ]; 
-          Double_t Eta = RECOMU_ETA[ z1lept[i] ]; 
+      for(int i = 0; i < 4; ++i){
+        Double_t Pt = RECOELE_PT[ iL_4L[i] ]; 
+        Double_t Eta = RECOELE_ETA[ iL_4L[i] ]; 
+        
+        if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
           
-          if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-            Int_t biny = mu_scale_2016->GetYaxis()->FindBin(Pt);
-            Int_t binx = mu_scale_2016->GetXaxis()->FindBin(Eta);
-            if (mu_scale_2016->GetBinContent(binx,biny)>0.) eff_weight*=mu_scale_2016->GetBinContent(binx,biny); 
+          if(RECOELE_isGap[ iL_4L[i] ]==0){
+            Int_t binx = ele_scale_factors2016->GetXaxis()->FindBin(Eta);
+            Int_t biny = ele_scale_factors2016->GetYaxis()->FindBin(Pt);
+            if (ele_scale_factors2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors2016->GetBinContent(binx,biny); 
           }
+          else if(RECOELE_isGap[ iL_4L[i] ]==1){
+            Int_t binx = ele_scale_factors_gap2016->GetXaxis()->FindBin(Eta);
+            Int_t biny = ele_scale_factors_gap2016->GetYaxis()->FindBin(Pt);
+            if (ele_scale_factors_gap2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors_gap2016->GetBinContent(binx,biny); 
+          }
+          
         }
       }
-      else if (Z1tag==2){ 
-        for(int i = 0; i < 2; ++i){
-          Double_t Pt = RECOELE_PT[ z1lept[i] ]; 
-          Double_t Eta = RECOELE_ETA[ z1lept[i] ]; 
-          
-          if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-            
-            if(RECOELE_isGap[ z1lept[i] ]==0){
-              Int_t binx = ele_scale_factors2016->GetXaxis()->FindBin(Eta);
-              Int_t biny = ele_scale_factors2016->GetYaxis()->FindBin(Pt);
-              if (ele_scale_factors2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors2016->GetBinContent(binx,biny); 
-            }
-            else if(RECOELE_isGap[ z1lept[i] ]==1){
-              Int_t binx = ele_scale_factors_gap2016->GetXaxis()->FindBin(Eta);
-              Int_t biny = ele_scale_factors_gap2016->GetYaxis()->FindBin(Pt);
-              if (ele_scale_factors_gap2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors_gap2016->GetBinContent(binx,biny); 
-            }
-            
-          }
-        }
-      }
-
       
-      if (Z2tag==1){ 
-        for(int i = 0; i < 2; ++i){
-          Double_t Pt = RECOMU_PT[ z2lept[i] ]; 
-          Double_t Eta = RECOMU_ETA[ z2lept[i] ]; 
-          
-          if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-            Int_t binx = mu_scale_2016->GetXaxis()->FindBin(Eta);
-            Int_t biny = mu_scale_2016->GetYaxis()->FindBin(Pt);
-            if (mu_scale_2016->GetBinContent(binx,biny)>0.) eff_weight*=mu_scale_2016->GetBinContent(binx,biny); 
-          }
-        }
-      }
-      else if (Z2tag==2){ 
-        for(int i = 0; i < 2; ++i){
-          Double_t Pt = RECOELE_PT[ z2lept[i] ]; 
-          Double_t Eta = RECOELE_ETA[ z2lept[i] ]; 
-          
-          if( (MC_type == "Spring16" || MC_type=="Moriond17") && DATA_type == "NO"){
-            
-            if(RECOELE_isGap[ z1lept[i] ]==0){
-              Int_t binx = ele_scale_factors2016->GetXaxis()->FindBin(Eta);
-              Int_t biny = ele_scale_factors2016->GetYaxis()->FindBin(Pt);
-              if (ele_scale_factors2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors2016->GetBinContent(binx,biny); 
-            }
-            else if(RECOELE_isGap[ z1lept[i] ]==1){
-              Int_t binx = ele_scale_factors_gap2016->GetXaxis()->FindBin(Eta);
-              Int_t biny = ele_scale_factors_gap2016->GetYaxis()->FindBin(Pt);
-              if (ele_scale_factors_gap2016->GetBinContent(binx,biny)>0.) eff_weight*=ele_scale_factors_gap2016->GetBinContent(binx,biny); 
-            }
-            
-          }
-        }
-      }
-
       if (DATA_type == "2016") eff_weight=1.; 
       // // Changing the weight for pileup and efficiency
       if (eff_weight>0.) newweight=weight*pT_weight*pu_weight*weight_kfactor*eff_weight;
@@ -3136,8 +2911,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       
       cout << "Starting weight + pileup + efficiency= " << newweight << endl;
       if(debug) cout << "Efficiency Weight for the 4l: " << eff_weight << " Final weight= " << newweight << endl;
-      
- 
+
  
       TLorentzVector hP4,Z1P4,Z2P4;
       Z1P4.SetPxPyPzE(pxZ1,pyZ1,pzZ1,EZ1);
@@ -3160,26 +2934,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       // sort index by pt (kinematics not corrected for FSR)
       int ipt[4] ;
       double tmp_pt[4];
-      if (Z1tag==1) cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl;
-      if (Z1tag==2) cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
-
+      cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl;
       int indexleptonfinal[4]={indexlep1Z1,indexlep2Z1,indexlep1Z2,indexlep2Z2};
-      //cout << "PTs= " << RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " <<  RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]]<< endl;
+      cout << "PTs= " << RECOELE_PT[indexleptonfinal[0]] << " " << RECOELE_PT[indexleptonfinal[1]] << " " <<  RECOELE_PT[indexleptonfinal[2]] << " " << RECOELE_PT[indexleptonfinal[3]]<< endl;
 
-      for(int i = 0; i < 2; ++i){ 
-	if (Z1tag==1) tmp_pt[i] =  RECOMU_PT[indexleptonfinal[i]];
-	if (Z1tag==2) tmp_pt[i] =  RECOELE_PT[indexleptonfinal[i]];
-	cout << tmp_pt[i] << endl;
-      }
-      for(int i = 2; i < 4; ++i){ 
-	if (Z2tag==1) tmp_pt[i] =  RECOMU_PT[indexleptonfinal[i]];
-	if (Z2tag==2) tmp_pt[i] =  RECOELE_PT[indexleptonfinal[i]];
-	cout << tmp_pt[i] << endl;
-      }
-      
-      float sortedpT[4];
-
-      for(int i = 0; i < 4; ++i){		
+      for(int i = 0; i < 4; ++i) tmp_pt[i] =  RECOELE_PT[indexleptonfinal[i]];
+      for(int i = 0; i < 4; ++i){
         double tmp_max_pt = 0;
       	int jj = i;
         for(int j = 0; j < 4; ++j){
@@ -3188,13 +2948,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       			jj  = j;
       		}
       	}
-	sortedpT[i]=tmp_max_pt;
       	ipt[i] = indexleptonfinal[jj];
-      	tmp_pt[jj] = 0;	
+      	tmp_pt[jj] = 0;
       }
       if(debug)
 	for(int i = 0; i < 4; ++i)
-	  cout << "\n ipt[" << i << "] = " << ipt[i] << "\t pt = " << sortedpT[i] << endl; 
+	  cout << "\n ipt[" << i << "] = " << ipt[i] << "\t pt = " << RECOELE_PT[ ipt[i] ] << endl; 
       //end sorting
      
 
@@ -3204,66 +2963,19 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       Char_t leptformat[20000];
 
       for(int i = 0; i < 4; ++i){      
-	bool ismuon=false,iselectron=false;
+
 	float dummy=0.;
-	int flagFSR_tag=-999;
+	int flagFSR=0;
 	int pfsr=-999;
-	
-	for (int j=0;j<RECO_NMU;j++) {	    
-	  if (RECOMU_PT[j]==sortedpT[i]) {
-	    ismuon=true;
-	    break;
-	  }
-	  else {
-	    for (int j=0;j<RECO_NELE;j++) {	    
-	      if (RECOELE_PT[j]==sortedpT[i]) {
-		iselectron=true;
-		break;
-	      }
-	    }
-	  }
-	}
-	
-	/*for (int j=0;j<RECO_NELE;j++) {	    
-	  if (RECOELE_PT[j]==sortedpT[i]) iselectron=true;
-	}
-	*/
-	
-	cout << "isMuon= " << ismuon << " and isElectron= " << iselectron << endl;
 
-	if (ismuon){
-	  for( int p = 0; p < Nphotons; ++p ){
-	    if( iLp_l[ p ] == ipt[i] && iLp_tagEM[ p ] == 0 )  {
-	      cout << "Muon with pT= " << RECOMU_PT[ipt[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
-	      flagFSR_tag=0;
-	      pfsr=p;
-	      break;
-	    }
+	for( int p = 0; p < Nphotons; ++p ){
+	  if( iLp_l[ p ] == ipt[i] && iLp_tagEM[ p ] == 1 )  {
+	    cout << "Electron with pT= " << RECOELE_PT[ipt[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
+	    flagFSR=1;
+	    pfsr=p;
 	  }
 	}
-	    
-	else if (iselectron){
-	  for( int p = 0; p < Nphotons; ++p ){
-	    if( iLp_l[ p ] == ipt[i] && iLp_tagEM[ p ] == 1 )  {
-	      cout << "Electron with pT= " << RECOELE_PT[ipt[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
-	      flagFSR_tag=1;
-	      pfsr=p;
-	      break;
-	    }
-	  }
-	}
-	
-
-	if (ismuon && flagFSR_tag==0){
-	  sprintf (leptformat,"FormatLept=%d:%d:%d:%d:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.3f:%.3f:%.2f:%.2f:%.2f",
-		   Run,LumiSection,Event,
-		   int(-13*RECOMU_CHARGE[ipt[i]]),
-		   RECOMU_PT[ipt[i]],RECOMU_ETA[ipt[i]],RECOMU_PHI[ipt[i]],RECOMU_SIP[ipt[i]],
-		   RECOMU_PFchHad[ipt[i]],RECOMU_PFneuHad[ipt[i]],RECOMU_PFphoton[ipt[i]],RECOMU_PFPUchAllPart[ipt[i]],RECOMU_PFX_dB[ipt[i]],dummy,
-		   RECOPFPHOT_PT[iLp[pfsr]],RECOPFPHOT_DR[iLp[pfsr]],RECOPFPHOT_PFX_rho[iLp[pfsr]]
-		   );
-	}
-	else if (iselectron && flagFSR_tag==1){
+	if (flagFSR==1){
 	  sprintf (leptformat,"FormatLept=%d:%d:%d:%d:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.3f:%.3f:%.2f:%.2f:%.2f",
 		   Run,LumiSection,Event,
 		   int(-11*RECOELE_CHARGE[ipt[i]]),
@@ -3271,58 +2983,50 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 		   RECOELE_PFchHad[ipt[i]],RECOELE_PFneuHad[ipt[i]],RECOELE_PFphoton[ipt[i]],RHO_ele,RECOELE_PFX_rho[ipt[i]],RECOELE_mvaNonTrigV0[ipt[i]],
 		   RECOPFPHOT_PT[iLp[pfsr]],RECOPFPHOT_DR[iLp[pfsr]],RECOPFPHOT_PFX_rho[iLp[pfsr]]
 		   );
-	}	
-	else if (ismuon){	  	  	      
-	  sprintf (leptformat,"FormatLept=%d:%d:%d:%d:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.3f:%.3f",
-		   Run,LumiSection,Event,
-		   int(-13*RECOMU_CHARGE[ipt[i]]),
-		   RECOMU_PT[ipt[i]],RECOMU_ETA[ipt[i]],RECOMU_PHI[ipt[i]],RECOMU_SIP[ipt[i]],
-		   RECOMU_PFchHad[ipt[i]],RECOMU_PFneuHad[ipt[i]],RECOMU_PFphoton[ipt[i]],RECOMU_PFPUchAllPart[ipt[i]],RECOMU_PFX_dB[ipt[i]],dummy
-		   );
 	}
-	else if (iselectron){
+	else {
 	  sprintf (leptformat,"FormatLept=%d:%d:%d:%d:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.3f:%.3f",
 		   Run,LumiSection,Event,
 		   int(-11*RECOELE_CHARGE[ipt[i]]),
 		   RECOELE_PT[ipt[i]],RECOELE_ETA[ipt[i]],RECOELE_PHI[ipt[i]],RECOELE_SIP[ipt[i]],
 		   RECOELE_PFchHad[ipt[i]],RECOELE_PFneuHad[ipt[i]],RECOELE_PFphoton[ipt[i]],RHO_ele,RECOELE_PFX_rho[ipt[i]],RECOELE_mvaNonTrigV0[ipt[i]]
 		   );
-	}	  
+	}
 	  
 	output_txt  << leptformat << endl;
 
-       // if( i == 0){
-       // 	 hPtLep1_5->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-       // 	 hYLep1_5->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-       // 	 hIsoLep1_5->Fill( RECOMU_PFX_dB[ ipt[i] ],newweight ) ;
-       // 	 hSipLep1_5->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-       // 	 hIpLep1_5->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-       // 	 hIpErLep1_5->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-       // }
-       // if( i == 1){
-       // 	 hPtLep2_5->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-       // 	 hYLep2_5->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-       // 	 hIsoLep2_5->Fill( RECOMU_PFX_dB[ ipt[i] ],newweight ) ;
-       // 	 hSipLep2_5->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-       // 	 hIpLep2_5->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-       // 	 hIpErLep2_5->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-       // }
-       // if( i == 2){
-       // 	 hPtLep3_5->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-       // 	 hYLep3_5->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-       // 	 hIsoLep3_5->Fill( RECOMU_PFX_dB[ ipt[i] ],newweight ) ;
-       // 	 hSipLep3_5->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-       // 	 hIpLep3_5->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-       // 	 hIpErLep3_5->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-       // }
-       // if( i == 3){
-       // 	 hPtLep4_5->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-       // 	 hYLep4_5->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-       // 	 hIsoLep4_5->Fill( RECOMU_PFX_dB[ ipt[i] ],newweight ) ;
-       // 	 hSipLep4_5->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-       // 	 hIpLep4_5->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-       // 	 hIpErLep4_5->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-       // }
+       if( i == 0){
+	 hPtLep1_5->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep1_5->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep1_5->Fill( RECOELE_PFX_dB[ ipt[i] ],newweight ) ;
+	 hSipLep1_5->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep1_5->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep1_5->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 1){
+	 hPtLep2_5->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep2_5->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep2_5->Fill( RECOELE_PFX_dB[ ipt[i] ],newweight ) ;
+	 hSipLep2_5->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep2_5->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep2_5->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 2){
+	 hPtLep3_5->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep3_5->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep3_5->Fill( RECOELE_PFX_dB[ ipt[i] ],newweight ) ;
+	 hSipLep3_5->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep3_5->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep3_5->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 3){
+	 hPtLep4_5->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep4_5->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep4_5->Fill( RECOELE_PFX_dB[ ipt[i] ],newweight ) ;
+	 hSipLep4_5->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep4_5->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep4_5->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
        
       }//end fill leptons
       
@@ -3332,52 +3036,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       //hSip_5->Fill( Sip_max,newweight ) ;
       //hIp_5->Fill( Ip_max,newweight ) ;
 
-      // N.B. Do NOT Update the Isolation values and correct the 4 momenta of leptons for FSR
-      for(int i = 0; i < N_good; ++i){
-	int flagFSR=0;
-	int pfsr=-999;
-	
-	for( int p = 0; p < Nphotons; ++p ){
-	  if (iLp[p]==-1) continue;
-	  if (iLp_l[p]==-1) continue;
-	  
-	  cout << "Index of lepton with photon ISR= " << iLp_l[ p ] << " and final lepton index= " << iL[i] << endl;
-	  if( iLp_l[ p ] == iL[i] && iLp_tagEM[ p ] == 0 )  {
-	    cout << "Muon with pT= " << RECOMU_PT[iL[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
-	    // RECOMU_PFX_dB_new[iL[i]]=
-	    //   (RECOMU_PFchHad[iL[i]]+
-	    //    max(0.,RECOMU_PFneuHad[iL[i]]+
-	    // 	   (RECOMU_PFphoton[iL[i]]-RECOPFPHOT_PT[iLp[p]] )-
-	    // 	   0.5*RECOMU_PFPUchAllPart[iL[i]]))/RECOMU_PT[iL[i]];
-	    
-	    flagFSR=1;
-	    pfsr=p;
-	  }
-	}
-	
-	
-	if (flagFSR==1){
-	  cout << "Before correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
-	  TLorentzVector Lept,LeptCorrection;
-	  Lept.SetPtEtaPhiM(RECOMU_PT[iL[i]], RECOMU_ETA[iL[i]], RECOMU_PHI[iL[i]], 0.105);
-	  LeptCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[pfsr]],RECOPFPHOT_ETA[iLp[pfsr]],RECOPFPHOT_PHI[iLp[pfsr]],0);
-	  Lept+=LeptCorrection;
-	  RECOMU_PT[iL[i]]=Lept.Pt();
-	  RECOMU_ETA[iL[i]]=Lept.Eta();
-	  RECOMU_PHI[iL[i]]=Lept.Phi();
-	  cout << "After correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
-	}
-      }
-      
-      // N.B. DO NOT Update the Isolation values and correct the 4 momenta of leptons for FSR
+      // N.B. Update the Isolation values and correct the 4 momenta of leptons for FSR
       for(int i = 0; i < Ne_good; ++i){
 	int flagFSR=0;
 	int pfsr=-999;
 	
 	for( int p = 0; p < Nphotons; ++p ){
-	  if (iLp[p]==-1) continue;
-	  if (iLp_l[p]==-1) continue;
-	  
 	  cout << "Index of lepton with photon ISR= " << iLp_l[ p ] << " and final lepton index= " << iLe[i] << endl;
 	  if( iLp_l[ p ] == iLe[i] && iLp_tagEM[ p ] == 1 )  {
 	    cout << "Electron with pT= " << RECOELE_PT[iLe[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
@@ -3385,7 +3049,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	    //   (RECOELE_PFchHad[iLe[i]]+
 	    //    max(0.,RECOELE_PFneuHad[iLe[i]]+
 	    // 	   (RECOELE_PFphoton[iLe[i]]-RECOPFPHOT_PT[iLp[p]] )-
-	    // 	   max(RHO_ele,0.0)*(EffectiveArea)))/RECOELE_PT[iLe[i]];	    
+	    // 	   max(RHO_ele,0.0)*(EffectiveArea)))/RECOELE_PT[iLe[i]];
+	   
 	    flagFSR=1;
 	    pfsr=p;
 	  }
@@ -3394,7 +3059,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	if (flagFSR==1){
 	  cout << "Before correcting for FSR; electron pT= " << RECOELE_PT[iLe[i]] << " Eta= " << RECOELE_ETA[iLe[i]] << " Phi= " << RECOELE_PHI[iLe[i]] << endl;
 	  TLorentzVector Lept,LeptCorrection;
-	  Lept.SetPtEtaPhiM(RECOELE_PT[iLe[i]], RECOELE_ETA[iLe[i]], RECOELE_PHI[iLe[i]], 0.105);
+	  Lept.SetPtEtaPhiM(RECOELE_PT[iLe[i]], RECOELE_ETA[iLe[i]], RECOELE_PHI[iLe[i]],0.000511);
 	  LeptCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[pfsr]],RECOPFPHOT_ETA[iLp[pfsr]],RECOPFPHOT_PHI[iLp[pfsr]],0);
 	  Lept+=LeptCorrection;
 	  RECOELE_PT[iLe[i]]=Lept.Pt();
@@ -3403,60 +3068,33 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  cout << "After correcting for FSR; muon pT= " << RECOELE_PT[iLe[i]] << " Eta= " << RECOELE_ETA[iLe[i]] << " Phi= " << RECOELE_PHI[iLe[i]] << endl;
 	}
       }
-      
       cout << "Kinematics of leptons corrected for FSR photons (if existing)" << endl;
-      
 
-      // sort index by pt (kinematics not corrected for FSR)
+      // sort index by pt (kinematics is now corrected for FSR)
       int iptcorr[4] ;
       double tmp_ptcorr[4];
-      int tmpfl_ptcorr[4];
-      if (Z1tag==1) cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl;
-      if (Z1tag==2) cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
-
+      cout << "PTs= " << RECOELE_PT[indexlep1Z1] << " " << RECOELE_PT[indexlep2Z1] << " " <<  RECOELE_PT[indexlep1Z2] << " " << RECOELE_PT[indexlep2Z2]<< endl;
       int indexleptonfinalcorr[4]={indexlep1Z1,indexlep2Z1,indexlep1Z2,indexlep2Z2};
-      //cout << "PTs= " << RECOMU_PT[indexleptonfinalcorr[0]] << " " << RECOMU_PT[indexleptonfinalcorr[1]] << " " <<  RECOMU_PT[indexleptonfinalcorr[2]] << " " << RECOMU_PT[indexleptonfinalcorr[3]]<< endl;
+      cout << "PTs= " << RECOELE_PT[indexleptonfinalcorr[0]] << " " << RECOELE_PT[indexleptonfinalcorr[1]] << " " <<  RECOELE_PT[indexleptonfinalcorr[2]] << " " << RECOELE_PT[indexleptonfinalcorr[3]]<< endl;
 
-      for(int i = 0; i < 2; ++i){ 
-	if (Z1tag==1) tmp_ptcorr[i] =  RECOMU_PT[indexleptonfinalcorr[i]];	
-	if (Z1tag==2) tmp_ptcorr[i] =  RECOELE_PT[indexleptonfinalcorr[i]];
-	tmpfl_ptcorr[i] =  Z1tag;
-	cout << tmp_ptcorr[i] << endl;
-      }
-      for(int i = 2; i < 4; ++i){ 
-	if (Z2tag==1) tmp_ptcorr[i] =  RECOMU_PT[indexleptonfinalcorr[i]];
-	if (Z2tag==2) tmp_ptcorr[i] =  RECOELE_PT[indexleptonfinalcorr[i]];
-	tmpfl_ptcorr[i] =  Z2tag;
-	cout << tmp_ptcorr[i] << endl;
-      }
-      
-      float sortedpTcorr[4];
-      int sortedfl_pTcorr[4];
-
-      for(int i = 0; i < 4; ++i){		
+      for(int i = 0; i < 4; ++i) tmp_ptcorr[i] =  RECOELE_PT[indexleptonfinalcorr[i]];
+      for(int i = 0; i < 4; ++i){
         double tmp_max_ptcorr = 0;
-	int tmpfl_max_ptcorr = 0;
       	int jj = i;
         for(int j = 0; j < 4; ++j){
       		if( tmp_ptcorr[j] > tmp_max_ptcorr ){
       			tmp_max_ptcorr = tmp_ptcorr[j];
-			tmpfl_max_ptcorr = tmpfl_ptcorr[j];
       			jj  = j;
       		}
       	}
-	sortedpTcorr[i]=tmp_max_ptcorr;
-	sortedfl_pTcorr[i]=tmpfl_max_ptcorr;
       	iptcorr[i] = indexleptonfinalcorr[jj];
-      	tmp_ptcorr[jj] = 0;	
-	tmpfl_ptcorr[jj] = 0;
+      	tmp_ptcorr[jj] = 0;
       }
       if(debug)
-	for(int i = 0; i < 4; ++i)
-	  cout << "\n iptcorr[" << i << "] = " << iptcorr[i] << "\t pt = " << sortedpTcorr[i] << " and flavour= " << sortedfl_pTcorr[i] << endl; 
-      //end sorting of pT corrected for FSR
-     
-
-
+      	  for(int i = 0; i < 4; ++i)
+      	  	cout << "\n iptcorr[" << i << "] = " << iptcorr[i] << "\t pt = " << RECOELE_PT[ iptcorr[i] ] << endl; 
+      //end sorting with FSR included
+      
       
       // // **** Step 6:
       //  // QCD suppression: mll>4 GeV cut on all OS-SF pairs (4/4)           
@@ -3490,46 +3128,46 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      /*
 
       for(unsigned int i=0; i< 4; i++){
-	TLorentzVector tlv; tlv.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[i]], RECOMU_ETA[indexleptonfinal[i]], RECOMU_PHI[indexleptonfinal[i]], RECOMU_MASS[indexleptonfinal[i]]); 
+	TLorentzVector tlv; tlv.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[i]], RECOELE_ETA[indexleptonfinal[i]], RECOELE_PHI[indexleptonfinal[i]], 0.000511); 
 	vtlv.push_back(tlv);
-	double pterr = (RECOMU_muInnertrkPTError[indexleptonfinal[i]]);
+        double pterr = ((RECOELE_PT[]/RECOELE_P[indexleptonfinal[i]])*RECOELE_PTError[indexleptonfinal[i]]);
 	vpterr.push_back(pterr);
 
-	Double_t Pt = RECOMU_PT[indexleptonfinal[i]]; 
-        Double_t Eta = RECOMU_ETA[indexleptonfinal[i]]; 
-        int PDGID = 13;
+	Double_t Pt = RECOELE_PT[indexleptonfinal[i]]; 
+        Double_t Eta = RECOELE_ETA[indexleptonfinal[i]]; 
+        int PDGID = 11;
 	double corr=1.;
 
-	if(fabs(PDGID) == 13){    
+	if(fabs(PDGID) == 11){    
  	  if( MC_type == "Fall11" && DATA_type == "NO"){
- 	    Int_t binx = ebe_mu_mc42x->GetXaxis()->FindBin(Pt);
- 	    Int_t biny = ebe_mu_mc42x->GetYaxis()->FindBin(Eta);
- 	    if (ebe_mu_mc42x->GetBinContent(binx,biny)>0.) corr=ebe_mu_mc42x->GetBinContent(binx,biny);
- 	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]*corr));	    
+ 	    Int_t binx = ebe_ele_mc42x->GetXaxis()->FindBin(Pt);
+ 	    Int_t biny = ebe_ele_mc42x->GetYaxis()->FindBin(Eta);
+ 	    if (ebe_ele_mc42x->GetBinContent(binx,biny)>0.) corr=ebe_ele_mc42x->GetBinContent(binx,biny);
+            vpterrcorr.push_back(double((RECOELE_PT[indexleptonfinal[i]]/RECOELE_P[iL_4L[i]])*RECOELE_PTError[indexleptonfinal[i]]*corr));        	    
  	  }
  	  else if( MC_type == "Summer12" && DATA_type == "NO"){
-	    Int_t binx = ebe_mu_mc53x->GetXaxis()->FindBin(Pt);
-	    Int_t biny = ebe_mu_mc53x->GetYaxis()->FindBin(Eta);
-	    if (ebe_mu_mc53x->GetBinContent(binx,biny)>0.) corr=ebe_mu_mc53x->GetBinContent(binx,biny);
-	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]*corr));
+	    Int_t binx = ebe_ele_mc53x->GetXaxis()->FindBin(Pt);
+	    Int_t biny = ebe_ele_mc53x->GetYaxis()->FindBin(Eta);
+	    if (ebe_ele_mc53x->GetBinContent(binx,biny)>0.) corr=ebe_ele_mc53x->GetBinContent(binx,biny);
+            vpterrcorr.push_back(double((RECOELE_PT[indexleptonfinal[i]]/RECOELE_P[indexleptonfinal[i]])*RECOELE_PTError[indexleptonfinal[i]]*corr));
 	  }
 	  else if( MC_type == "Phys14" && DATA_type == "NO"){
-	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]));
+	    vpterrcorr.push_back(pterr);
 	  }
 	  else if( MC_type == "NO" && DATA_type == "2011"){
-	    Int_t binx = ebe_mu_reco42x->GetXaxis()->FindBin(Pt);
-	    Int_t biny = ebe_mu_reco42x->GetYaxis()->FindBin(Eta);
-	    if (ebe_mu_reco42x->GetBinContent(binx,biny)>0.) corr=ebe_mu_reco42x->GetBinContent(binx,biny);
-	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]*corr));
+	    Int_t binx = ebe_ele_reco42x->GetXaxis()->FindBin(Pt);
+	    Int_t biny = ebe_ele_reco42x->GetYaxis()->FindBin(Eta);
+	    if (ebe_ele_reco42x->GetBinContent(binx,biny)>0.) corr=ebe_ele_reco42x->GetBinContent(binx,biny);
+            vpterrcorr.push_back(double((RECOELE_PT[indexleptonfinal[i]]/RECOELE_P[indexleptonfinal[i]])*RECOELE_PTError[indexleptonfinal[i]]*corr));
 	  }
 	  else if( MC_type == "NO" && DATA_type == "2012"){
-	    Int_t binx = ebe_mu_reco53x->GetXaxis()->FindBin(Pt);
-	    Int_t biny = ebe_mu_reco53x->GetYaxis()->FindBin(Eta);
-	    if (ebe_mu_reco53x->GetBinContent(binx,biny)>0.) corr=ebe_mu_reco53x->GetBinContent(binx,biny);
-	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]*corr));
+	    Int_t binx = ebe_ele_reco53x->GetXaxis()->FindBin(Pt);
+	    Int_t biny = ebe_ele_reco53x->GetYaxis()->FindBin(Eta);
+	    if (ebe_ele_reco53x->GetBinContent(binx,biny)>0.) corr=ebe_ele_reco53x->GetBinContent(binx,biny);
+	    vpterrcorr.push_back(double((RECOELE_PT[indexleptonfinal[i]]/RECOELE_P[indexleptonfinal[i]])*RECOELE_PTError[indexleptonfinal[i]]*corr));
 	  }	  
 	  else if( MC_type == "NO" && DATA_type == "2013"){
-	    vpterrcorr.push_back(double(RECOMU_muInnertrkPTError[indexleptonfinal[i]]));
+	    vpterrcorr.push_back(pterr);
 	  }
  	}
       }   
@@ -3576,54 +3214,55 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 // 	}
 
 //       }
-      
+
       ++N_7_PFMET;
       N_7_PFMET_w=N_7_PFMET_w+newweight;
       
-      hM4l_7->Fill( mass4l,newweight );
-      hPFMET_7->Fill(RECO_PFMET,newweight);
-      hMZ1_7->Fill( massZ1,newweight );
-      hPtZ1_7->Fill( ptZ1,newweight );
-      hYZ1_7->Fill( Y_Z1,newweight );
       
-      hMZ2_7->Fill( massZ2,newweight );
-      hPtZ2_7->Fill( ptZ2,newweight );
-      hYZ2_7->Fill( Y_Z2,newweight );
-      
+     hM4l_7->Fill( mass4l,newweight );
+     hPFMET_7->Fill(RECO_PFMET,newweight);
+     hMZ1_7->Fill( massZ1,newweight );
+     hPtZ1_7->Fill( ptZ1,newweight );
+     hYZ1_7->Fill( Y_Z1,newweight );
+     
+     hMZ2_7->Fill( massZ2,newweight );
+     hPtZ2_7->Fill( ptZ2,newweight );
+     hYZ2_7->Fill( Y_Z2,newweight );
+     
      // Leptons PT, ETA, Phi, Isol corrected for FSR
      for(int i = 0; i < 4; ++i){
        
        if( i == 0){
-	 hPtLep1_7->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-	 hYLep1_7->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-	 hIsoLep1_7->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-	 hSipLep1_7->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-	 hIpLep1_7->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-	 hIpErLep1_7->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
+	 hPtLep1_7->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep1_7->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep1_7->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep1_7->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep1_7->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep1_7->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
        }
        if( i == 1){
-	 hPtLep2_7->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-	 hYLep2_7->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-	 hIsoLep2_7->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-	 hSipLep2_7->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-	 hIpLep2_7->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-	 hIpErLep2_7->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
+	 hPtLep2_7->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep2_7->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep2_7->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep2_7->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep2_7->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep2_7->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
        }
        if( i == 2){
-	 hPtLep3_7->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-	 hYLep3_7->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-	 hIsoLep3_7->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-	 hSipLep3_7->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-	 hIpLep3_7->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-	 hIpErLep3_7->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
+	 hPtLep3_7->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep3_7->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep3_7->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep3_7->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep3_7->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep3_7->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
        }
        if( i == 3){
-	 hPtLep4_7->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-	 hYLep4_7->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-	 hIsoLep4_7->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-	 hSipLep4_7->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-	 hIpLep4_7->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-	 hIpErLep4_7->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
+	 hPtLep4_7->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep4_7->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep4_7->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep4_7->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep4_7->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep4_7->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
        }
        
      }//end fill leptons
@@ -3631,7 +3270,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      //hIso_7->Fill( Iso_max,newweight ) ;
      //hSip_7->Fill( Sip_max,newweight ) ;
      //hIp_7->Fill( Ip_max,newweight ) ;
-     
      
      // **** Step 8:
      // mass4l > 100 
@@ -3660,42 +3298,42 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      hMZ2_noFSR_8->Fill( massZ2_noFSR,newweight );
      
      
-     // for(int i = 0; i < 4; ++i){
+     for(int i = 0; i < 4; ++i){
        
-     //   if( i == 0){
-     // 	 hPtLep1_8->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-     // 	 hYLep1_8->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-     // 	 hIsoLep1_8->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-     // 	 hSipLep1_8->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-     // 	 hIpLep1_8->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-     // 	 hIpErLep1_8->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-     //   }
-     //   if( i == 1){
-     // 	 hPtLep2_8->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-     // 	 hYLep2_8->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-     // 	 hIsoLep2_8->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-     // 	 hSipLep2_8->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-     // 	 hIpLep2_8->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-     // 	 hIpErLep2_8->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-     //   }
-     //   if( i == 2){
-     // 	 hPtLep3_8->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-     // 	 hYLep3_8->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-     // 	 hIsoLep3_8->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-     // 	 hSipLep3_8->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-     // 	 hIpLep3_8->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-     // 	 hIpErLep3_8->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-     //   }
-     //   if( i == 3){
-     // 	 hPtLep4_8->Fill( RECOMU_PT[ ipt[i] ],newweight ) ;
-     // 	 hYLep4_8->Fill(  RECOMU_ETA[ ipt[i] ],newweight ) ;
-     // 	 hIsoLep4_8->Fill( RECOMU_PFX_dB_new[ ipt[i] ],newweight ) ;
-     // 	 hSipLep4_8->Fill( RECOMU_SIP[ ipt[i] ],newweight ) ;
-     // 	 hIpLep4_8->Fill( RECOMU_IP[ ipt[i] ],newweight ) ;
-     // 	 hIpErLep4_8->Fill( RECOMU_IPERROR[ ipt[i] ],newweight ) ;
-     //   }
+       if( i == 0){
+	 hPtLep1_8->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep1_8->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep1_8->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep1_8->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep1_8->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep1_8->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 1){
+	 hPtLep2_8->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep2_8->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep2_8->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep2_8->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep2_8->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep2_8->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 2){
+	 hPtLep3_8->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep3_8->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep3_8->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep3_8->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep3_8->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep3_8->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
+       if( i == 3){
+	 hPtLep4_8->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;
+	 hYLep4_8->Fill(  RECOELE_ETA[ ipt[i] ],newweight ) ;
+	 hIsoLep4_8->Fill( RECOELE_PFX_rho_new[ ipt[i] ],newweight ) ;
+	 hSipLep4_8->Fill( RECOELE_SIP[ ipt[i] ],newweight ) ;
+	 hIpLep4_8->Fill( RECOELE_IP[ ipt[i] ],newweight ) ;
+	 hIpErLep4_8->Fill( RECOELE_IPERROR[ ipt[i] ],newweight ) ;
+       }
        
-     // }//end fill leptons
+     }//end fill leptons
      
      //hIso_8->Fill( Iso_max,newweight ) ;
      //hSip_8->Fill( Sip_max,newweight ) ;
@@ -3718,6 +3356,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      hPFMET_PhotonEnUp_8->Fill(RECO_PFMET_PhotonEnUp,newweight);
      hPFMET_PhotonEnDn_8->Fill(RECO_PFMET_PhotonEnDn,newweight);
 
+
      // //VBF
      cout << "Starting VBF analysis " << endl;
      
@@ -3731,10 +3370,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      
      for(int i=0;i<RECO_PFJET_N;i++){
        cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
-       
-        //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
-       if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
-       
+       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
+       if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){       
+
       	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
 	 for(int mu = 0; mu < N_good; ++mu){
 	   if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
@@ -3759,7 +3397,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	     break;
      	   }
      	 }
-	 
+
 	 // cleaning w.r.t FSR photons attached to leptons
 	 for(int j=0.;j<Nphotons;j++) {
            if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
@@ -3774,25 +3412,24 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	   }
          }
 	 // 
-
-
+	 
 	 if (jetfail[i]==0){
 	   cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
 	   njets_pass++;
 	   if (njets_pass==1){
 	     jet1=i;
 	     JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
-
+	     
 	     f_jet1_highpt_pt = RECO_PFJET_PT[i];
 	     f_jet1_highpt_eta = RECO_PFJET_ETA[i];
 	     f_jet1_highpt_phi = RECO_PFJET_PHI[i];
-	     f_jet1_highpt_e = RECO_PFJET_ET[i];	     
+	     f_jet1_highpt_e = RECO_PFJET_ET[i];
 
 	   }
 	   if (njets_pass==2){
 	     jet2=i;
 	     JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
-	     
+
 	     f_jet2_highpt_pt = RECO_PFJET_PT[i];
 	     f_jet2_highpt_eta = RECO_PFJET_ETA[i];
 	     f_jet2_highpt_phi = RECO_PFJET_PHI[i];
@@ -3806,8 +3443,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	   }
 
 	   //@ fills all jets
-	   if(njets_pass <= maxJets){
-	     f_jets_highpt_pt[njets_pass-1]                           = RECO_PFJET_PT[i];
+	  if(njets_pass <= maxJets){
+            f_jets_highpt_pt[njets_pass-1]                           = RECO_PFJET_PT[i];
 	    f_jets_highpt_pt_error[njets_pass-1]                     = RECO_PFJET_PT[i]-RECO_PFJET_PT_UncDn[i];//The error is symmetric
             f_jets_highpt_eta[njets_pass-1]                          = RECO_PFJET_ETA[i];
             f_jets_highpt_phi[njets_pass-1]                          = RECO_PFJET_PHI[i];
@@ -3848,7 +3485,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
               f_jets_highpt_component_vertex_chi2[njets_pass-1][ic]  = RECO_PFJET_COMPONENT_VERTEX_CHI2[i][ic];
             }
           }
-	   
+
 	 }
 
        }
@@ -3895,10 +3532,10 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	 deltajj=fabs(JET1_VBF.Eta()-JET2_VBF.Eta());
 	 massjj=mJJ.M();
 	 D_jet=0.18*fabs(JET1_VBF.Eta()-JET2_VBF.Eta())+1.92E-4*mJJ.M();
-	 if (debug) cout << "Jet1 pT / Jet2 pT= " << JET1_VBF.Pt() << " " << JET2_VBF.Pt()<< " Mass jet jet= " << massjj << " Delta jet jet= " << deltajj << " Fisher D_jet= " << D_jet << endl;
+	 if (debug) cout << "JetpT / Jet 2 pT= " << JET1_VBF.Pt() << " " << JET2_VBF.Pt()<< " Mass jet jet= " << massjj << " Delta jet jet= " << deltajj << " Fisher D_jet= " << D_jet << endl;
 	 if (D_jet>0.5) {
 	   njets_vbf++;
-	   if (njets_vbf==1) { // the two highest pT jets	 
+	   if (njets_vbf==1) {
 	     index_VBFjets[0]=i;
 	     index_VBFjets[1]=j;    
 	     JET1_VBF.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
@@ -3919,7 +3556,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        if (jetfail[i]!=0) continue;
        for (int j=0;j<50;j++){
 	 if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.8484 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
-	   //if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.460 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) { 
+	   //if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.460 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   //if (cSV_BTagJet_DISCR[j]>0.8484 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   n_match_bjets++;
 	   //if (n_match_bjets==1) jet1=i;
@@ -3962,7 +3599,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      int category=-999;
 
      //  exactly 4 leptons + at least 2 jets with Djet>0.5 + at most 1 b-tag jet in the event  - category 2
-     if (N_good==2 && Ne_good==2 && njets_vbf>=1 && n_bjets<=1){
+     if (Ne_good==4 && njets_vbf>=1 && n_bjets<=1){
        
        jet1=index_VBFjets[0];
        jet2=index_VBFjets[1];
@@ -4000,7 +3637,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      }
      
      // exactly 4 leptons + at least one pair of jets passing { |η|<2.4, pT>40, 60<mjj<120 } + pT,4l>m4l - category 4
-     else if ((n_bjets==2 && N_good==2 && Ne_good==2) || (n_jets_mjj_VH>=1 && N_good==2 && Ne_good==2 && hP4.Pt()>hP4.M())) {
+     else if ((n_bjets==2 && Ne_good==4) || (n_jets_mjj_VH>=1 && Ne_good==4 && hP4.Pt()>hP4.M())) {
        if (n_bjets==2 && N_good==4) {	 
 	 JET1.SetPtEtaPhiE(cSV_BTagJet_PT[index_bjets[0]],cSV_BTagJet_ETA[index_bjets[0]],
 			   cSV_BTagJet_PHI[index_bjets[0]],cSV_BTagJet_ET[index_bjets[0]]*TMath::CosH(cSV_BTagJet_ETA[index_bjets[0]]));
@@ -4019,10 +3656,10 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      }
 
      // VH-leptonic-tagged category - category 3
-     else if (njets_pass<=2 && n_bjets==0 && (N_good+Ne_good)>=5) category=3;
+     else if (njets_pass<=2 && n_bjets==0 && Ne_good>=5) category=3;
 
      // ttH-tagged category - category 5
-     else if ((njets_pass>=3 && n_bjets>=1) || (N_good+Ne_good)>=5) category=5;
+     else if ((njets_pass>=3 && n_bjets>=1) || Ne_good>=5) category=5;
 
      // 1-jet-tagged category - category 1
      else if (njets_pass>=1) category=1;
@@ -4031,7 +3668,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      else if (category<0 ) category =0;
 
      // MonoHiggs category
-     if (abs(mass4l-125.)<=10. && N_good==2 && Ne_good==2 && n_bjets<=1 ) category=6;
+     if (abs(mass4l-125.)<=10. && Ne_good==4 && n_bjets<=1) category=6;
 
      cout << "Categorization completed - event category is= " << category << endl;
 
@@ -4046,98 +3683,41 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      f_run = Run;
      f_event = Event;
      f_lumi = LumiSection;
-     f_PU_vertices = num_PU_vertices;
 
-     if (sortedfl_pTcorr[0]==1){       
-       f_lept1_pt  = RECOMU_PT[iptcorr[0]] ;
-       f_lept1_pt_error = RECOMU_mubesttrkPTError[iptcorr[0]] ;
-       f_lept1_eta = RECOMU_ETA[iptcorr[0]] ;
-       f_lept1_phi = RECOMU_PHI[iptcorr[0]];
-       f_lept1_charge = RECOMU_CHARGE[iptcorr[0]];
-       f_lept1_pfx = RECOMU_PFX_dB_new[iptcorr[0]];
-       f_lept1_sip = RECOMU_SIP[iptcorr[0]];
-       //    f_lept1_mvaid = RECOMU_mvaNonTrigV0[iptcorr[0]];
-     }
-     if (sortedfl_pTcorr[0]==2){
-       f_lept1_pt  = RECOELE_PT[iptcorr[0]] ;
-       f_lept1_pt_error = RECOELE_PTError[iptcorr[0]] ;
-       f_lept1_eta = RECOELE_ETA[iptcorr[0]] ;
-       f_lept1_phi = RECOELE_PHI[iptcorr[0]];
-       f_lept1_charge = RECOELE_CHARGE[iptcorr[0]];
-       f_lept1_pfx = RECOELE_PFX_rho_new[iptcorr[0]];
-       f_lept1_sip = RECOELE_SIP[iptcorr[0]];
-       //    f_lept1_mvaid = RECOELE_mvaNonTrigV0[iptcorr[0]];
-     }
-
-
-     if (sortedfl_pTcorr[1]==1){
-       f_lept2_pt  = RECOMU_PT[iptcorr[1]] ;
-       f_lept2_pt_error = RECOMU_mubesttrkPTError[iptcorr[1]] ;
-       f_lept2_eta = RECOMU_ETA[iptcorr[1]] ;
-       f_lept2_phi = RECOMU_PHI[iptcorr[1]];
-       f_lept2_charge = RECOMU_CHARGE[iptcorr[1]];
-       f_lept2_pfx = RECOMU_PFX_dB_new[iptcorr[1]];
-       f_lept2_sip = RECOMU_SIP[iptcorr[1]];
-       //    f_lept2_mvaid = RECOMU_mvaNonTrigV0[iptcorr[1]];
-     }
-     if (sortedfl_pTcorr[1]==2){
-       f_lept2_pt  = RECOELE_PT[iptcorr[1]] ;
-       f_lept2_pt_error = RECOELE_PTError[iptcorr[1]] ;
-       f_lept2_eta = RECOELE_ETA[iptcorr[1]] ;
-       f_lept2_phi = RECOELE_PHI[iptcorr[1]];
-       f_lept2_charge = RECOELE_CHARGE[iptcorr[1]];
-       f_lept2_pfx = RECOELE_PFX_rho_new[iptcorr[1]];
-       f_lept2_sip = RECOELE_SIP[iptcorr[1]];
-       //    f_lept2_mvaid = RECOELE_mvaNonTrigV0[iptcorr[1]];
-     }
-
-
-
-     if (sortedfl_pTcorr[2]==1){
-       f_lept3_pt  = RECOMU_PT[iptcorr[2]] ;
-       f_lept3_pt_error = RECOMU_mubesttrkPTError[iptcorr[2]] ;
-       f_lept3_eta = RECOMU_ETA[iptcorr[2]] ;
-       f_lept3_phi = RECOMU_PHI[iptcorr[2]];
-       f_lept3_charge = RECOMU_CHARGE[iptcorr[2]];
-       f_lept3_pfx = RECOMU_PFX_dB_new[iptcorr[2]];
-       f_lept3_sip = RECOMU_SIP[iptcorr[2]];
-       //    f_lept3_mvaid = RECOMU_mvaNonTrigV0[iptcorr[2]];
-     }
-     if (sortedfl_pTcorr[2]==2){
-       f_lept3_pt  = RECOELE_PT[iptcorr[2]] ;
-       f_lept3_pt_error = RECOELE_PTError[iptcorr[2]] ;     
-       f_lept3_eta = RECOELE_ETA[iptcorr[2]] ;
-       f_lept3_phi = RECOELE_PHI[iptcorr[2]];
-       f_lept3_charge = RECOELE_CHARGE[iptcorr[2]];
-       f_lept3_pfx = RECOELE_PFX_rho_new[iptcorr[2]];
-       f_lept3_sip = RECOELE_SIP[iptcorr[2]];
-       //    f_lept3_mvaid = RECOELE_mvaNonTrigV0[iptcorr[2]];
-     }
-
-
-     if (sortedfl_pTcorr[3]==1){
-       f_lept4_pt  = RECOMU_PT[iptcorr[3]] ;
-       f_lept4_pt_error = RECOMU_mubesttrkPTError[iptcorr[3]] ;
-       f_lept4_eta = RECOMU_ETA[iptcorr[3]] ;
-       f_lept4_phi = RECOMU_PHI[iptcorr[3]];
-       f_lept4_charge = RECOMU_CHARGE[iptcorr[3]];
-       f_lept4_pfx = RECOMU_PFX_dB_new[iptcorr[3]];
-       f_lept4_sip = RECOMU_SIP[iptcorr[3]];
-       //    f_lept4_mvaid = RECOMU_mvaNonTrigV0[iptcorr[3]];
-     }
-     if (sortedfl_pTcorr[3]==2){
-       f_lept4_pt  = RECOELE_PT[iptcorr[3]] ;
-       f_lept4_pt_error = RECOMU_mubesttrkPTError[iptcorr[3]] ;
-       f_lept4_eta = RECOELE_ETA[iptcorr[3]] ;
-       f_lept4_phi = RECOELE_PHI[iptcorr[3]];
-       f_lept4_charge = RECOELE_CHARGE[iptcorr[3]];
-       f_lept4_pfx = RECOELE_PFX_rho_new[iptcorr[3]];
-       f_lept4_sip = RECOELE_SIP[iptcorr[3]];
-       //    f_lept4_mvaid = RECOELE_mvaNonTrigV0[iptcorr[3]];
-     }
-
-      
-     //f_iso_max = Iso_max;
+     f_lept1_pt = RECOELE_PT[iptcorr[0]] ;
+     f_lept1_pt_error = RECOELE_PTError[iptcorr[0]] ;
+     f_lept1_eta = RECOELE_ETA[iptcorr[0]] ;
+     f_lept1_phi = RECOELE_PHI[iptcorr[0]];
+     f_lept1_charge = RECOELE_CHARGE[iptcorr[0]];
+     f_lept1_pfx = RECOELE_PFX_rho_new[iptcorr[0]];
+     f_lept1_sip = RECOELE_SIP[iptcorr[0]];
+     f_lept1_mvaid = RECOELE_mvaNonTrigV0[iptcorr[0]];
+     f_lept2_pt = RECOELE_PT[iptcorr[1]] ;
+     f_lept2_pt_error = RECOELE_PTError[iptcorr[1]] ;
+     f_lept1_pt_error = RECOMU_mubesttrkPTError[iptcorr[0]] ;
+     f_lept2_eta = RECOELE_ETA[iptcorr[1]] ;
+     f_lept2_phi = RECOELE_PHI[iptcorr[1]];
+     f_lept2_charge = RECOELE_CHARGE[iptcorr[1]];
+     f_lept2_pfx = RECOELE_PFX_rho_new[iptcorr[1]];
+     f_lept2_sip = RECOELE_SIP[iptcorr[1]];
+     f_lept2_mvaid = RECOELE_mvaNonTrigV0[iptcorr[1]];
+     f_lept3_pt = RECOELE_PT[iptcorr[2]] ;
+     f_lept3_pt_error = RECOELE_PTError[iptcorr[2]] ;
+     f_lept3_eta = RECOELE_ETA[iptcorr[2]] ;
+     f_lept3_phi = RECOELE_PHI[iptcorr[2]];
+     f_lept3_charge = RECOELE_CHARGE[iptcorr[2]];
+     f_lept3_pfx = RECOELE_PFX_rho_new[iptcorr[2]];
+     f_lept3_sip = RECOELE_SIP[iptcorr[2]];
+     f_lept3_mvaid = RECOELE_mvaNonTrigV0[iptcorr[2]];
+     f_lept4_pt = RECOELE_PT[iptcorr[3]] ;
+     f_lept4_pt_error = RECOELE_PTError[iptcorr[3]] ;
+     f_lept4_eta = RECOELE_ETA[iptcorr[3]] ;
+     f_lept4_phi = RECOELE_PHI[iptcorr[3]];
+     f_lept4_charge = RECOELE_CHARGE[iptcorr[3]];
+     f_lept4_pfx = RECOELE_PFX_rho_new[iptcorr[3]];
+     f_lept4_sip = RECOELE_SIP[iptcorr[3]];
+     f_lept4_mvaid = RECOELE_mvaNonTrigV0[iptcorr[3]];
+     //     f_iso_max = Iso_max;
      //f_sip_max = Sip_max;
      f_Z1mass = massZ1;
      f_Z2mass = massZ2;
@@ -4189,7 +3769,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        f_massjj = mJJnew.M();
        f_D_jet =0.18*fabs(JET1new.Eta()-JET2new.Eta())+1.92E-4*mJJnew.M();
      }
-       
+
      f_pfmet=RECO_PFMET;
      f_pfmet_JetEnUp = RECO_PFMET_JetEnUp;
      f_pfmet_JetEnDn = RECO_PFMET_JetEnDn;
@@ -4203,34 +3783,25 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      f_pfmet_UnclusteredEnDn = RECO_PFMET_UnclusteredEnDn;
      f_pfmet_PhotonEnUp = RECO_PFMET_PhotonEnUp;
      f_pfmet_PhotonEnDn = RECO_PFMET_PhotonEnDn;
-
+     
      f_genmet=MC_GENMET;
      f_category=category;
-     f_Ngood=N_good+Ne_good;
+     f_Ngood=Ne_good;
      f_Nbjets=n_bjets;
-
-     //MELA discriminant - Lepton kinematics already corrected for FSR
+  
+     f_PU_vertices = num_PU_vertices;   
+  
+     //MELA discriminant - Leoton kinematics already corrected for FSR
      TLorentzVector L11P4,L12P4,L21P4,L22P4;
      float angle_costheta1,angle_costheta2,angle_Phi,angle_costhetastar,angle_Phi1;
 
-     cout << "Final: pT of final leptons from Z1 and Z2 =";
-     if (Z1tag==1) cout << RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " << RECOELE_PT[indexleptonfinal[2]] << " " << RECOELE_PT[indexleptonfinal[3]] <<endl;
-     if (Z1tag==2) cout << RECOELE_PT[indexleptonfinal[0]] << " " << RECOELE_PT[indexleptonfinal[1]] << " " << RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]] <<endl;
+     cout << "Final: pT of final leptons from Z1 and Z2 ="
+	  << RECOELE_PT[indexleptonfinal[0]] << " " << RECOELE_PT[indexleptonfinal[1]] << " " << RECOELE_PT[indexleptonfinal[2]] << " " << RECOELE_PT[indexleptonfinal[3]] <<endl;
      
-     if (Z1tag==1 && Z2tag==2){
-       L11P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[0]], RECOMU_ETA[indexleptonfinal[0]], RECOMU_PHI[indexleptonfinal[0]], 0.105);
-       L12P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[1]], RECOMU_ETA[indexleptonfinal[1]], RECOMU_PHI[indexleptonfinal[1]], 0.105);
-       L21P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[2]], RECOELE_ETA[indexleptonfinal[2]], RECOELE_PHI[indexleptonfinal[2]], 0.000511);
-       L22P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[3]], RECOELE_ETA[indexleptonfinal[3]], RECOELE_PHI[indexleptonfinal[3]], 0.000511);
-     }
-
-     if (Z1tag==2 && Z2tag==1){
-       L11P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[0]], RECOELE_ETA[indexleptonfinal[0]], RECOELE_PHI[indexleptonfinal[0]], 0.000511);
-       L12P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[1]], RECOELE_ETA[indexleptonfinal[1]], RECOELE_PHI[indexleptonfinal[1]], 0.000511);
-       L21P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[2]], RECOMU_ETA[indexleptonfinal[2]], RECOMU_PHI[indexleptonfinal[2]], 0.105);
-       L22P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[3]], RECOMU_ETA[indexleptonfinal[3]], RECOMU_PHI[indexleptonfinal[3]], 0.105);
-     }
-
+     L11P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[0]], RECOELE_ETA[indexleptonfinal[0]], RECOELE_PHI[indexleptonfinal[0]], 0.000511);
+     L12P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[1]], RECOELE_ETA[indexleptonfinal[1]], RECOELE_PHI[indexleptonfinal[1]], 0.000511);
+     L21P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[2]], RECOELE_ETA[indexleptonfinal[2]], RECOELE_PHI[indexleptonfinal[2]], 0.000511);
+     L22P4.SetPtEtaPhiM(RECOELE_PT[indexleptonfinal[3]], RECOELE_ETA[indexleptonfinal[3]], RECOELE_PHI[indexleptonfinal[3]], 0.000511);
      
      //Correcting 4-momenta for FSR photons
      // cout << "Correcting leptons for FSR..... "<< endl;
@@ -4243,8 +3814,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        
      //   for( int p = 0; p < Nphotons; ++p ){
      // 	 cout << "Index of lepton with photon ISR= " << iLp_l[ p ] << " and final lepton index= " << indexleptonfinal[i] << endl;
-     // 	 if( iLp_l[ p ] == indexleptonfinal[i] && iLp_tagEM[ p ] == 0 )  {
-     // 	   cout << "Muon with pT= " << RECOMU_PT[indexleptonfinal[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
+     // 	 if( iLp_l[ p ] == indexleptonfinal[i] && iLp_tagEM[ p ] == 1 )  {
+     // 	   cout << "Muon with pT= " << RECOELE_PT[indexleptonfinal[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
      // 	   flagFSR=1;
      // 	   pfsr=p;
      // 	 }
@@ -4260,58 +3831,30 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      
      //Assigning correct PID numbers
      int L11PID,L12PID,L21PID,L22PID;
-
-     if (Z1tag==1 && Z2tag==2){
-       if (RECOMU_CHARGE[indexleptonfinal[0]] == 1){
-	 L11PID=-13;
-	 L12PID=+13;
-	 f_lept1_pdgid=-13;
-	 f_lept2_pdgid=13;
-       }
-       else if (RECOMU_CHARGE[indexleptonfinal[0]] == -1){
-	 L11PID=13;
-	 L12PID=-13;
-	 f_lept1_pdgid=13;
-	 f_lept2_pdgid=-13;
-       }
-       if (RECOELE_CHARGE[indexleptonfinal[2]] == 1){
-	 L21PID=-11;
-	 L22PID=11;
-	 f_lept3_pdgid=-11;
-	 f_lept4_pdgid=11;
-       }
-       else if (RECOELE_CHARGE[indexleptonfinal[2]] == -1){
-	 L21PID=11;
-	 L22PID=-11;
-	 f_lept3_pdgid=11;
-	 f_lept4_pdgid=-11;
-       }       
-     }    
-     else if (Z1tag==2 && Z2tag==1){
-       if (RECOELE_CHARGE[indexleptonfinal[0]] == 1){
-	 L11PID=-11;
-	 L12PID=+11;
-	 f_lept1_pdgid=-11;
-	 f_lept2_pdgid=11;
-       }
-       else if (RECOELE_CHARGE[indexleptonfinal[0]] == -1){
-	 L11PID=11;
-	 L12PID=-11;
-	 f_lept1_pdgid=11;
-	 f_lept2_pdgid=-11;
-       }
-       if (RECOMU_CHARGE[indexleptonfinal[2]] == 1){
-	 L21PID=-13;
-	 L22PID=13;
-	 f_lept3_pdgid=-13;
-	 f_lept4_pdgid=13;
-       }
-       else if (RECOMU_CHARGE[indexleptonfinal[2]] == -1){
-	 L21PID=13;
-	 L22PID=-13;
-	 f_lept3_pdgid=13;
-	 f_lept4_pdgid=-13;
-       }
+     if (RECOELE_CHARGE[indexleptonfinal[0]] == 1){
+       L11PID=-11;
+       L12PID=+11;
+       f_lept1_pdgid=-11;
+       f_lept2_pdgid=11;
+     }
+     else if (RECOELE_CHARGE[indexleptonfinal[0]] == -1){
+       L11PID=11;
+       L12PID=-11;
+       f_lept1_pdgid=11;
+       f_lept2_pdgid=-11;
+     }
+     else cout << "What the hell?!?!"<<endl;
+     if (RECOELE_CHARGE[indexleptonfinal[2]] == 1){
+       L21PID=-11;
+       L22PID=11;
+       f_lept3_pdgid=-11;
+       f_lept4_pdgid=11;
+     }
+     else if (RECOELE_CHARGE[indexleptonfinal[2]] == -1){
+       L21PID=11;
+       L22PID=-11;
+       f_lept3_pdgid=11;
+       f_lept4_pdgid=-11;
      }
      else cout << "What the hell?!?!"<<endl;
      
@@ -4323,13 +3866,12 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      float psPsig,psPbkg,psD,gravPsig,gravPbkg,gravD;     
      double pt4l=0.,eta4l=0.;
 
-     
      // 4l transverse mass + met
      float DPHI = 0.;
      DPHI = DELTAPHI(hP4.Phi(),RECO_PFMET_PHI);
 
      float m4l_T=sqrt(2*hP4.Pt()*RECO_PFMET*(1-cos(DPHI)));
-     hM4l_T_8->Fill(m4l_T,newweight); 
+     hM4l_T_8->Fill(m4l_T,newweight);       
      hLogLinXM4l_T_8->Fill(m4l_T,newweight);
      f_mT=m4l_T;
      hDPHI_8->Fill(fabs(DPHI),newweight);
@@ -4379,7 +3921,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        double phjj_VAJHU, pvbf_VAJHU;
        
        int a=combinedMEM.computeME(MEMNames::kSMHiggs, MEMNames::kJHUGen, partP, partId, p0plus_VAJHU); // Calculation of SM gg->H->4l JHUGen ME      
-       cout << "a= "  << p0plus_VAJHU << endl;
+       //cout << "a= "  << p0plus_VAJHU << endl;
        int b=combinedMEM.computeME(MEMNames::k0minus, MEMNames::kJHUGen, partP, partId, p0minus_VAJHU); // Calculation of PS (0-, fa3=1) gg->H->4l JHUGen ME 
        int c=combinedMEM.computeME(MEMNames::kggHZZ_10, MEMNames::kMCFM, partP, partId, Dgg10_VAMCFM); // Direct calculation of Dgg (D^kin for off-shell) from MCFM MEs
        int d=combinedMEM.computeME(MEMNames::kqqZZ, MEMNames::kMCFM, partP, partId, bkg_VAMCFM); // qq->4l background calculation from MCFM
@@ -4420,6 +3962,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        f_pt4l = pt4l;
        f_eta4l = eta4l;
 
+
         //@ Computes the variations of MELA due to systematic uncertainties
        if(njets_pass >= 2){
 	 TLorentzVector partP;
@@ -4434,42 +3977,37 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
          partsId.push_back(0);
          partsId.push_back(0);
 	 
-	 float pt_error = 0;
 	 vpartP.clear();
-	 pt_error = (abs(L11PID) == 13)? pt_error = RECOMU_mubesttrkPTError[indexleptonfinal[0]] : pt_error = RECOELE_PTError[indexleptonfinal[0]];
-	 partP.SetPtEtaPhiE(L11P4.Pt(),L11P4.Eta(),L11P4.Phi(),L11P4.E());		vpartP.push_back( partP );//Nominal
-	 partP.SetPtEtaPhiE(L11P4.Pt()+pt_error,L11P4.Eta(),L11P4.Phi(),L11P4.E());	vpartP.push_back( partP );//+ Pt Uncertainty
-	 partP.SetPtEtaPhiE(L11P4.Pt()-pt_error,L11P4.Eta(),L11P4.Phi(),L11P4.E());	vpartP.push_back( partP );//- Pt Uncertainty
+	 partP.SetPtEtaPhiE(L11P4.Pt(),L11P4.Eta(),L11P4.Phi(),L11P4.E());						vpartP.push_back( partP );//Nominal
+	 partP.SetPtEtaPhiE(L11P4.Pt()+RECOELE_PTError[indexleptonfinal[0]],L11P4.Eta(),L11P4.Phi(),L11P4.E());		vpartP.push_back( partP );//+ Pt Uncertainty
+	 partP.SetPtEtaPhiE(L11P4.Pt()-RECOELE_PTError[indexleptonfinal[0]],L11P4.Eta(),L11P4.Phi(),L11P4.E());		vpartP.push_back( partP );//- Pt Uncertainty
 	 vpartsP.push_back( vpartP );
 
 	 vpartP.clear();
-	 pt_error = (abs(L11PID) == 13)? pt_error = RECOMU_mubesttrkPTError[indexleptonfinal[1]] : pt_error = RECOELE_PTError[indexleptonfinal[1]];
-	 partP.SetPtEtaPhiE(L12P4.Pt(),L12P4.Eta(),L12P4.Phi(),L12P4.E());							vpartP.push_back( partP );//Nominal
-	 partP.SetPtEtaPhiE(L12P4.Pt()+pt_error,L12P4.Eta(),L12P4.Phi(),L12P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
-	 partP.SetPtEtaPhiE(L12P4.Pt()-pt_error,L12P4.Eta(),L12P4.Phi(),L12P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
+	 partP.SetPtEtaPhiE(L12P4.Pt(),L12P4.Eta(),L12P4.Phi(),L12P4.E());						vpartP.push_back( partP );//Nominal
+	 partP.SetPtEtaPhiE(L12P4.Pt()+RECOELE_PTError[indexleptonfinal[1]],L12P4.Eta(),L12P4.Phi(),L12P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
+	 partP.SetPtEtaPhiE(L12P4.Pt()-RECOELE_PTError[indexleptonfinal[1]],L12P4.Eta(),L12P4.Phi(),L12P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
 	 vpartsP.push_back( vpartP );
 
 	 vpartP.clear();
-	 pt_error = (abs(L11PID) == 13)? pt_error = RECOMU_mubesttrkPTError[indexleptonfinal[2]] : pt_error = RECOELE_PTError[indexleptonfinal[2]];
-	 partP.SetPtEtaPhiE(L21P4.Pt(),L21P4.Eta(),L21P4.Phi(),L21P4.E());							vpartP.push_back( partP );//Nominal
-	 partP.SetPtEtaPhiE(L21P4.Pt()+pt_error,L21P4.Eta(),L21P4.Phi(),L21P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
-	 partP.SetPtEtaPhiE(L21P4.Pt()-pt_error,L21P4.Eta(),L21P4.Phi(),L21P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
+	 partP.SetPtEtaPhiE(L21P4.Pt(),L21P4.Eta(),L21P4.Phi(),L21P4.E());						vpartP.push_back( partP );//Nominal
+	 partP.SetPtEtaPhiE(L21P4.Pt()+RECOELE_PTError[indexleptonfinal[2]],L21P4.Eta(),L21P4.Phi(),L21P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
+	 partP.SetPtEtaPhiE(L21P4.Pt()-RECOELE_PTError[indexleptonfinal[2]],L21P4.Eta(),L21P4.Phi(),L21P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
 	 vpartsP.push_back( vpartP );
 	 
 	 vpartP.clear();
-	 pt_error = (abs(L11PID) == 13)? pt_error = RECOMU_mubesttrkPTError[indexleptonfinal[3]] : pt_error = RECOELE_PTError[indexleptonfinal[3]];
-	 partP.SetPtEtaPhiE(L22P4.Pt(),L22P4.Eta(),L22P4.Phi(),L22P4.E());			vpartP.push_back( partP );//Nominal
-	 partP.SetPtEtaPhiE(L22P4.Pt()+pt_error,L22P4.Eta(),L22P4.Phi(),L22P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
-	 partP.SetPtEtaPhiE(L22P4.Pt()-pt_error,L22P4.Eta(),L22P4.Phi(),L22P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
+	 partP.SetPtEtaPhiE(L22P4.Pt(),L22P4.Eta(),L22P4.Phi(),L22P4.E());						vpartP.push_back( partP );//Nominal
+	 partP.SetPtEtaPhiE(L22P4.Pt()+RECOELE_PTError[indexleptonfinal[3]],L22P4.Eta(),L22P4.Phi(),L22P4.E());		vpartP.push_back( partP );//+Pt Uncertainty
+	 partP.SetPtEtaPhiE(L22P4.Pt()-RECOELE_PTError[indexleptonfinal[3]],L22P4.Eta(),L22P4.Phi(),L22P4.E());		vpartP.push_back( partP );//-Pt Uncertainty
 	 vpartsP.push_back( vpartP );
 	 
 	 vpartP.clear();
 	 TLorentzVector Jet1, Jet2;
 	 Jet1.SetPtEtaPhiE(f_jets_highpt_pt[0],f_jets_highpt_eta[0],f_jets_highpt_phi[0],f_jets_highpt_et[0]*TMath::CosH(f_jets_highpt_eta[0]));
 	 Jet2.SetPtEtaPhiE(f_jets_highpt_pt[1],f_jets_highpt_eta[1],f_jets_highpt_phi[1],f_jets_highpt_et[1]*TMath::CosH(f_jets_highpt_eta[1]));
-	 partP.SetPtEtaPhiE(Jet1.Pt(),Jet1.Eta(),Jet1.Phi(),Jet1.E());					vpartP.push_back( partP );//Nominal
-	 partP.SetPtEtaPhiE(Jet1.Pt()+f_jets_highpt_pt_error[0],Jet1.Eta(),Jet1.Phi(),Jet1.E());	vpartP.push_back( partP );//+Pt Uncertainty
-	 partP.SetPtEtaPhiE(Jet1.Pt()-f_jets_highpt_pt_error[0],Jet1.Eta(),Jet1.Phi(),Jet1.E());	vpartP.push_back( partP );//-Pt Uncertainty
+	 partP.SetPtEtaPhiE(Jet1.Pt(),Jet1.Eta(),Jet1.Phi(),Jet1.E());								vpartP.push_back( partP );//Nominal
+	 partP.SetPtEtaPhiE(Jet1.Pt()+f_jets_highpt_pt_error[0],Jet1.Eta(),Jet1.Phi(),Jet1.E());				vpartP.push_back( partP );//+Pt Uncertainty
+	 partP.SetPtEtaPhiE(Jet1.Pt()-f_jets_highpt_pt_error[0],Jet1.Eta(),Jet1.Phi(),Jet1.E());				vpartP.push_back( partP );//-Pt Uncertainty
 	 vpartsP.push_back( vpartP );
 	 
 	 vpartP.clear();
@@ -4508,26 +4046,15 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	 f_Djet_VAJHU_UncUp =-1;
 	 f_Djet_VAJHU_UncDn =-1;
        }
-       
 
        newtree->Fill();              
        
        // Filling BNN input       
        bnn_file << newweight << " " << w << " ";
-       if (Z1tag==1 && Z2tag==0){
-	 printmubnn(indexleptonfinal[0]);
-	 printmubnn(indexleptonfinal[1]);      
-	 printelebnn(indexleptonfinal[2]);
-	 printelebnn(indexleptonfinal[3]);
-       }
-       else if (Z1tag==0 && Z2tag==1){
-	 printelebnn(indexleptonfinal[0]);
-	 printelebnn(indexleptonfinal[1]);      
-	 printmubnn(indexleptonfinal[2]);
-	 printmubnn(indexleptonfinal[3]);
-       }
-       
-
+       printelebnn(indexleptonfinal[0]);
+       printelebnn(indexleptonfinal[1]);
+       printelebnn(indexleptonfinal[2]);
+       printelebnn(indexleptonfinal[3]);
        //bnn_file << Iso_max << " " << Sip_max << " " << massofZ1 << " " << massofZ2 << " " << angle_costhetastar << " " << angle_costheta1 << " " << angle_costheta2 << " " << angle_Phi << " " << angle_Phi1<< " " << D << " " << psD << " " << gravD << " " << pt4l << " " << massofhiggs << " " << RECO_PFMET << " ";
        
        // cout << "Njets=" << njets_pass << " VD= " << VD << endl;
@@ -4562,7 +4089,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      }
      
      // end of KD
-
+     
      // Step 8a m4l window cut
      if ( abs(mass4l-125.)<=10.){ 
        ++N_8_a;
@@ -4594,16 +4121,16 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        hNgood_9->Fill(f_Ngood,newweight);
        hNbjets_9->Fill(f_Nbjets,newweight);
      }
-     
+
      // **** Step 10:
      // |mass4l-125| < 10 + Ngood=4 + Nbjets<=1 .
 
-     if (abs(mass4l-125.)<=10. && N_good==2 && Ne_good==2 && n_bjets<=1) {
+     if (abs(mass4l-125.)<=10. && Ne_good==4 && n_bjets<=1) {
        ++N_10;
        N_10_w=N_10_w+newweight;     
        hPFMET_10->Fill(RECO_PFMET,newweight);
        hLogLinXPFMET_10->Fill(RECO_PFMET,newweight);
-       hM4l_T_10->Fill(m4l_T,newweight);  
+       hM4l_T_10->Fill(m4l_T,newweight);
        hLogLinXM4l_T_10->Fill(m4l_T,newweight);
        hDPHI_10->Fill(fabs(DPHI),newweight);
        hNgood_10->Fill(f_Ngood,newweight);
@@ -4636,22 +4163,36 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        hLogLinXPFMET_PhotonEnUp_10->Fill(RECO_PFMET_PhotonEnUp,newweight);
        hLogLinXPFMET_PhotonEnDn_10->Fill(RECO_PFMET_PhotonEnDn,newweight);
 
-       hPtLep1_10->Fill( f_lept1_pt,newweight ) ;
-       hPtLep2_10->Fill( f_lept2_pt,newweight ) ;
-       hPtLep3_10->Fill( f_lept3_pt,newweight ) ;
-       hPtLep4_10->Fill( f_lept4_pt,newweight ) ;
-     }
+       for(int i = 0; i < 4; ++i){
+	 
+	 if( i == 0){
+	   hPtLep1_10->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;	   
+	 }
+	 if( i == 1){
+	   hPtLep2_10->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;	  
+	 }
+	 if( i == 2){
+	   hPtLep3_10->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;	   
+	 }
+	 if( i == 3){
+	   hPtLep4_10->Fill( RECOELE_PT[ ipt[i] ],newweight ) ;	   
+	 }
+       
+       }//end fill leptons
      
-     if (abs(mass4l-125.)<=10. && N_good==2 && Ne_good==2 && n_bjets<=1 && RECO_PFMET>=50.) {
+     }
+
+     if (abs(mass4l-125.)<=10. && Ne_good==4 && n_bjets<=1 && RECO_PFMET>=50.) {
        ++N_11;
        N_11_w=N_11_w+newweight;  
      }  
-
+     
      // reverte the mass peak
-     if (abs(mass4l-125.)>10. && N_good==2 && Ne_good==2 && n_bjets<=1){
+     if (abs(mass4l-125.)>10. && Ne_good==4 && n_bjets<=1){
        hPFMET_12->Fill(RECO_PFMET,newweight);
        hLogLinXPFMET_12->Fill(RECO_PFMET,newweight);
      }
+
 
      //if( debug )
      cout << "EVENT CANDIDATE: \n" 
@@ -4686,7 +4227,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      //<<endl;
      if( has_FSR_Z1 || has_FSR_Z2 ) output_txt << " FSR " << endl;	
      else output_txt << " noFSR " << endl;
-     if (debug) for(unsigned int i=0; i< 4; i++) output_txt << "\t mu[" << i << "] pT: " << RECOMU_PT[indexleptonfinal[i]] << "\t eta: " <<  RECOMU_ETA[indexleptonfinal[i]] << "\t phi: " <<  RECOMU_PHI[indexleptonfinal[i]] << endl;
+     if (debug) for(unsigned int i=0; i< 4; i++) output_txt << "\t mu[" << i << "] pT: " << RECOELE_PT[indexleptonfinal[i]] << "\t eta: " <<  RECOELE_ETA[indexleptonfinal[i]] << "\t phi: " <<  RECOELE_PHI[indexleptonfinal[i]] << endl;
 
      // Format
      //{run}:{lumi}:{event}:{mass4l:.2f}:{mZ1:.2f}:{mZ2:.2f}:{massErrRaw:.2f}:{massErrCorr:.2f}:{KD:.3f}:{pt4l:.2f}:{njets30:.0}:{jet1pt:.2f}:{jet2pt:.2f}:{mjj:.2f}:{detajj:.3f}:{fishjj:.3f}:{KD(0-):.3f}:{KD(0+h):.3f}:{KD(1+):.3f}:{KD(1-):.3f}:{KD(gg2+m):.3f}:{KD(qq2+m):.3f}
@@ -4759,9 +4300,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      << "N_9a_VBF " << N_9a_VBF << " \n"
               << "N_9b_VBF " << N_9b_VBF << "\n"
 	      << "N_VBF "    << N_VBF << " \n"
-	      << "N_9_PFMET "<< N_9_PFMET << " \n"
+     	      << "N_9_PFMET "<< N_9_PFMET << " \n"
 	      << "N_10 " << N_10 << " \n";
-
+   
    output_txt_vbf
               << "N_0 "  << N_0  << " \n" 
 	      << "N_01 " << N_01 << " \n"	
@@ -4788,7 +4329,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      << "N_9a_VBF " << N_9a_VBF << " \n"
               << "N_9b_VBF " << N_9b_VBF << "\n"
 	      << "N_VBF "    << N_VBF << " \n"
-	      << "N_9_PFMET "<< N_9_PFMET << " \n"
+     	      << "N_9_PFMET "<< N_9_PFMET << " \n"
 	      << "N_10 " << N_10 << " \n";
 
    bnn_file.close();
@@ -4822,18 +4363,18 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	      << "N_9a_VBF "  << N_9a_VBF << " \n"
               << "N_9b_VBF "  << N_9b_VBF << "\n"
 	      << "N_VBF "     << N_VBF << " \n"
-	      << "N_9_PFMET "<< N_9_PFMET << " \n"
+	      << "N_9_PFMET " << N_9_PFMET << " \n"
 	      << "N_10 " << N_10 << " \n";
 
    nEvent_4l->GetXaxis()->SetBinLabel(1,"Init.");
-   nEvent_4l->GetXaxis()->SetBinLabel(2,"MCTruth: 4mu");
+   nEvent_4l->GetXaxis()->SetBinLabel(2,"MCTruth: 4e");
    nEvent_4l->GetXaxis()->SetBinLabel(3,"MCTruth: Acc");
    nEvent_4l->GetXaxis()->SetBinLabel(4,"Init");
    nEvent_4l->GetXaxis()->SetBinLabel(5,"HLT");
    nEvent_4l->GetXaxis()->SetBinLabel(6,"Z1 lept. cuts");
    nEvent_4l->GetXaxis()->SetBinLabel(7,"Z1+#gamma");
    nEvent_4l->GetXaxis()->SetBinLabel(8,"m_{Z1}");
-   nEvent_4l->GetXaxis()->SetBinLabel(9,"4#mu");
+   nEvent_4l->GetXaxis()->SetBinLabel(9,"4e");
    nEvent_4l->GetXaxis()->SetBinLabel(10,"at least one Z2");
    nEvent_4l->GetXaxis()->SetBinLabel(11,"Z2 lept. cuts");
    nEvent_4l->GetXaxis()->SetBinLabel(12,"m_{Z2}");
@@ -4850,14 +4391,14 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    nEvent_4l->GetXaxis()->SetBinLabel(23,"$|m_{4l}-125.|<=10$, $N_{good \\, l}=4$, $n_{b-jets}<=1$, $MET>50$");
 
    nEvent_4l_w->GetXaxis()->SetBinLabel(1,"Init."); 
-   nEvent_4l_w->GetXaxis()->SetBinLabel(2,"MCTruth: 4mu");  
+   nEvent_4l_w->GetXaxis()->SetBinLabel(2,"MCTruth: 4e");  
    nEvent_4l_w->GetXaxis()->SetBinLabel(3,"MCTruth: Acc");
    nEvent_4l_w->GetXaxis()->SetBinLabel(4,"Init");
    nEvent_4l_w->GetXaxis()->SetBinLabel(5,"HLT");
    nEvent_4l_w->GetXaxis()->SetBinLabel(6,"Z1 lept. cuts");
    nEvent_4l_w->GetXaxis()->SetBinLabel(7,"Z1+#gamma");
    nEvent_4l_w->GetXaxis()->SetBinLabel(8,"m_{Z1}");
-   nEvent_4l_w->GetXaxis()->SetBinLabel(9,"4#mu");
+   nEvent_4l_w->GetXaxis()->SetBinLabel(9,"4e");
    nEvent_4l_w->GetXaxis()->SetBinLabel(10,"at least one Z2");
    nEvent_4l_w->GetXaxis()->SetBinLabel(11,"Z2 lept. cuts");
    nEvent_4l_w->GetXaxis()->SetBinLabel(12,"m_{Z2}");
@@ -4921,7 +4462,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    nEvent_4l_w->SetBinContent(22,N_10_w);      nEvent_4l_w->SetBinError(22,sqrt(N_10)*N_10_w/N_10);
    nEvent_4l_w->SetBinContent(23,N_11_w);      nEvent_4l_w->SetBinError(22,sqrt(N_11)*N_11_w/N_11);
 
-   nEvent_red->GetXaxis()->SetBinLabel(1,"MCTruth: 2e2mu in Geom. Acc");
+   nEvent_red->GetXaxis()->SetBinLabel(1,"MCTruth: 4e in Geom. Acc");
    nEvent_red->GetXaxis()->SetBinLabel(2,"One Z with lept. cuts");
    nEvent_red->GetXaxis()->SetBinLabel(3,"Two Z with 12 < m_{Z} < 120");
    nEvent_red->GetXaxis()->SetBinLabel(4,"One ZZ (no lept. overlap, #Delta R > 0.02)");
@@ -4943,11 +4484,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    nEvent_ZZ->GetXaxis()->SetBinLabel(4,"Z_{1}(m_{Z1}>40) and Z_{2}");
    nEvent_ZZ->GetXaxis()->SetBinLabel(5,"m4l > 100");
 
-   nEvent_ZZ->SetBinContent(1,N_3b);
-   nEvent_ZZ->SetBinContent(2,N_4b);
-   nEvent_ZZ->SetBinContent(3,N_4c);
-   nEvent_ZZ->SetBinContent(4,N_4d);
-   nEvent_ZZ->SetBinContent(5,N_8);
+   nEvent_ZZ->SetBinContent(1,N_3b_w);
+   nEvent_ZZ->SetBinContent(2,N_4b_w);
+   nEvent_ZZ->SetBinContent(3,N_4c_w);
+   nEvent_ZZ->SetBinContent(4,N_4d_w);
+   nEvent_ZZ->SetBinContent(5,N_8_w);
 
    // write on output root file:
    _filePU->Close();
@@ -4962,39 +4503,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    skimfile->Close();
 } // end main
 
-
-double HZZ4LeptonsAnalysis::EAele(int index,bool use2011EA){
-  
-  double EffectiveArea=0.;
-  if (use2011EA){
-    if (fabs(RECOELE_scl_Eta[index]) >= 0.0   && fabs(RECOELE_scl_Eta[index]) < 1.0 )   EffectiveArea = 0.18;
-    if (fabs(RECOELE_scl_Eta[index]) >= 1.0   && fabs(RECOELE_scl_Eta[index]) < 1.479 ) EffectiveArea = 0.20;
-    if (fabs(RECOELE_scl_Eta[index]) >= 1.479 && fabs(RECOELE_scl_Eta[index]) < 2.0 )   EffectiveArea = 0.15;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.0   && fabs(RECOELE_scl_Eta[index]) < 2.2 )   EffectiveArea = 0.19;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.2   && fabs(RECOELE_scl_Eta[index]) < 2.3 )   EffectiveArea = 0.21;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.3   && fabs(RECOELE_scl_Eta[index]) < 2.4 )   EffectiveArea = 0.22;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.4 )                                           EffectiveArea = 0.29;
-  }
-  //else { // 7_4_x use eta
-  // if (fabs(RECOELE_ETA[index]) >= 0.0   && fabs(RECOELE_ETA[index]) < 0.8 )   EffectiveArea = 0.1830;
-  // if (fabs(RECOELE_ETA[index]) >= 0.8   && fabs(RECOELE_ETA[index]) < 1.3 )   EffectiveArea = 0.1734;
-  // if (fabs(RECOELE_ETA[index]) >= 1.3   && fabs(RECOELE_ETA[index]) < 2.0 )   EffectiveArea = 0.1077;
-  // if (fabs(RECOELE_ETA[index]) >= 2.0   && fabs(RECOELE_ETA[index]) < 2.2 )   EffectiveArea = 0.1565;
-  // if (fabs(RECOELE_ETA[index]) >= 2.2 )                                       EffectiveArea = 0.2680;
-    //}                                                                                                                                                                             
-  else { // 7_6_X use eta supercluster                                                                                                                                             
-    if (fabs(RECOELE_scl_Eta[index]) >= 0.0   && fabs(RECOELE_scl_Eta[index]) < 1.0 )   EffectiveArea = 0.1752;
-    if (fabs(RECOELE_scl_Eta[index]) >= 1.0   && fabs(RECOELE_scl_Eta[index]) < 1.479 ) EffectiveArea = 0.1862;
-    if (fabs(RECOELE_scl_Eta[index]) >= 1.479 && fabs(RECOELE_scl_Eta[index]) < 2.0 )   EffectiveArea = 0.1411;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.0   && fabs(RECOELE_scl_Eta[index]) < 2.2 )   EffectiveArea = 0.1534;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.2   && fabs(RECOELE_scl_Eta[index]) < 2.3 )   EffectiveArea = 0.1903;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.3   && fabs(RECOELE_scl_Eta[index]) < 2.4 )   EffectiveArea = 0.2243;
-    if (fabs(RECOELE_scl_Eta[index]) >= 2.4   && fabs(RECOELE_scl_Eta[index]) < 5.0  )  EffectiveArea = 0.2687;
-  }
-  
-  return EffectiveArea;
-  
-}
 
 double DELTAPHI( double phi1, double phi2 ){
 
@@ -5071,6 +4579,41 @@ double HZZ4LeptonsAnalysis::masserror( std::vector<TLorentzVector> Lep, std::vec
   }
   return sqrt(masserr);
 }
+
+double HZZ4LeptonsAnalysis::EAele(int index,bool use2011EA){
+  
+  double EffectiveArea=0.;
+  if (use2011EA){
+    if (fabs(RECOELE_scl_Eta[index]) >= 0.0   && fabs(RECOELE_scl_Eta[index]) < 1.0 )   EffectiveArea = 0.18;
+    if (fabs(RECOELE_scl_Eta[index]) >= 1.0   && fabs(RECOELE_scl_Eta[index]) < 1.479 ) EffectiveArea = 0.20;
+    if (fabs(RECOELE_scl_Eta[index]) >= 1.479 && fabs(RECOELE_scl_Eta[index]) < 2.0 )   EffectiveArea = 0.15;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.0   && fabs(RECOELE_scl_Eta[index]) < 2.2 )   EffectiveArea = 0.19;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.2   && fabs(RECOELE_scl_Eta[index]) < 2.3 )   EffectiveArea = 0.21;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.3   && fabs(RECOELE_scl_Eta[index]) < 2.4 )   EffectiveArea = 0.22;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.4 )                                       EffectiveArea = 0.29;
+  }
+  //else { // 7_4_x use eta
+  // if (fabs(RECOELE_ETA[index]) >= 0.0   && fabs(RECOELE_ETA[index]) < 0.8 )   EffectiveArea = 0.1830;
+  // if (fabs(RECOELE_ETA[index]) >= 0.8   && fabs(RECOELE_ETA[index]) < 1.3 )   EffectiveArea = 0.1734;
+  // if (fabs(RECOELE_ETA[index]) >= 1.3   && fabs(RECOELE_ETA[index]) < 2.0 )   EffectiveArea = 0.1077;
+  // if (fabs(RECOELE_ETA[index]) >= 2.0   && fabs(RECOELE_ETA[index]) < 2.2 )   EffectiveArea = 0.1565;
+  // if (fabs(RECOELE_ETA[index]) >= 2.2 )                                       EffectiveArea = 0.2680;
+  //}
+  else { // 7_6_X use eta supercluster   
+    if (fabs(RECOELE_scl_Eta[index]) >= 0.0   && fabs(RECOELE_scl_Eta[index]) < 1.0 )   EffectiveArea = 0.1752;
+    if (fabs(RECOELE_scl_Eta[index]) >= 1.0   && fabs(RECOELE_scl_Eta[index]) < 1.479 ) EffectiveArea = 0.1862;
+    if (fabs(RECOELE_scl_Eta[index]) >= 1.479 && fabs(RECOELE_scl_Eta[index]) < 2.0 )   EffectiveArea = 0.1411;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.0   && fabs(RECOELE_scl_Eta[index]) < 2.2 )   EffectiveArea = 0.1534;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.2   && fabs(RECOELE_scl_Eta[index]) < 2.3 )   EffectiveArea = 0.1903;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.3   && fabs(RECOELE_scl_Eta[index]) < 2.4 )   EffectiveArea = 0.2243;
+    if (fabs(RECOELE_scl_Eta[index]) >= 2.4   && fabs(RECOELE_scl_Eta[index]) < 5.0  )  EffectiveArea = 0.2687;
+  }
+  
+  return EffectiveArea;
+
+}
+
+
 
 float HZZ4LeptonsAnalysis::kfactor_qqZZ_qcd_dPhi(float GENdPhiZZ, int finalState)
 {

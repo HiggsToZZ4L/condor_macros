@@ -935,7 +935,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    Float_t f_D_bkg_kin,f_D_bkg,f_D_gg,f_D_g4,f_Djet_VAJHU; 
    Float_t f_genmet, f_pfmet,f_mT,f_dphi;
    Int_t f_lept1_pdgid,f_lept2_pdgid,f_lept3_pdgid,f_lept4_pdgid;
-   Int_t f_category,f_Ngood,f_Nbjets, f_PU_vertices;
+   Int_t f_category,f_Ngood,f_Nbjets;
 
    Int_t f_run, f_lumi, f_event;
 
@@ -1119,7 +1119,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_f_category= newtree->Branch("f_category", &f_category,"f_category/I");
    TBranch *b_f_Ngood= newtree->Branch("f_Ngood", &f_Ngood,"f_Ngood/I");
    TBranch *b_f_Nbjets=newtree->Branch("f_Nbjets", &f_Nbjets, "f_Nbjets/I");
-   TBranch *b_f_PU_vertices=newtree->Branch("f_PU_vertices", &f_PU_vertices, "f_PU_vertices/I");
+
    float newweight=1.;
    
    // New tree with clone of events passing the final selection
@@ -1145,7 +1145,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
        //@
       f_lept1_pt_error=-999., f_lept2_pt_error=-999., f_lept3_pt_error=-999., f_lept4_pt_error=-999.;
       f_Djet_VAJHU_UncUp = -999, f_Djet_VAJHU_UncDn = -999;
-      f_pfmet_JetEnUp = -999., f_pfmet_JetEnDn = -999., f_pfmet_ElectronEnUp = -999., f_pfmet_ElectronEnDn = -999., f_pfmet_MuonEnUp = -999., f_pfmet_MuonEnDn = -999., f_pfmet_JetResUp = -999., f_pfmet_JetResDn = -999., f_pfmet_UnclusteredEnUp = -999., f_pfmet_UnclusteredEnDn = -999., f_pfmet_PhotonEnUp = -999., f_pfmet_PhotonEnDn = -999., f_PU_vertices = -999.;
+      f_pfmet_JetEnUp = -999., f_pfmet_JetEnDn = -999., f_pfmet_ElectronEnUp = -999., f_pfmet_ElectronEnDn = -999., f_pfmet_MuonEnUp = -999., f_pfmet_MuonEnDn = -999., f_pfmet_JetResUp = -999., f_pfmet_JetResDn = -999., f_pfmet_UnclusteredEnUp = -999., f_pfmet_UnclusteredEnDn = -999., f_pfmet_PhotonEnUp = -999., f_pfmet_PhotonEnDn = -999.;
       for(unsigned int ijet=0; ijet<maxJets; ++ijet){
         f_jets_highpt_charged_hadron_multiplicity[ijet] = -999;
         f_jets_highpt_charged_multiplicity[ijet] = -999;
@@ -4046,7 +4046,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
      f_run = Run;
      f_event = Event;
      f_lumi = LumiSection;
-     f_PU_vertices = num_PU_vertices;
 
      if (sortedfl_pTcorr[0]==1){       
        f_lept1_pt  = RECOMU_PT[iptcorr[0]] ;
